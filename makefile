@@ -36,9 +36,7 @@ OBJECTS1 = main.o
 .SILENT:
 .PHONY: clean
 
-all: criptoWavs
-
-criptoWavs = $(TARGET1)
+all: $(TARGET1)
 
 $(TARGET1): $(OBJECTS1)
 	@echo "Linking" $@"..."
