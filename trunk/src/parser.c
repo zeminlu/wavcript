@@ -5,10 +5,9 @@
  *  \author Pablo Giorgi, Santiago Pérez de Rosso & Luciano R. Zemin
  */
  
-#include <string.h>
 #include "../inc/parser.h"
 
-*t_input parseInput(int argc, char *argv[]) {
+t_input * parseInput(int argc, char *argv[]) {
 	t_input *input = malloc(sizeof(t_input));
 	
 	int i = 0;
@@ -16,7 +15,7 @@
 		char *currentOpt = argv[i];
 		if(strcmp(currentOpt, "-in") == 0) {
 			if(i + 1 < argc) {
-				if(input->input == null) {
+				if(input->input == NULL) {
 					input->input = argv[i+1];
 				} else {
 					// TODO: Manage error, duplicated opcode.
@@ -26,7 +25,7 @@
 			}
 		} else if(strcmp(currentOpt, "-out") == 0) {
 			if(i + 1 < argc) {
-				if(input->output == null) {
+				if(input->output == NULL) {
 					input->output = argv[i+1];
 				} else {
 					// TODO: Manage error, duplicated opcode.
@@ -36,7 +35,7 @@
 			}
 		} else if(strcmp(currentOpt, "-pass") == 0) {
 			if(i + 1 < argc) {
-				if(input->pass == null) {
+				if(input->pass == NULL) {
 					input->pass = argv[i+1];
 				} else {
 					// TODO: Manage error, duplicated opcode.
@@ -46,7 +45,7 @@
 			}
 		} else if(strcmp(currentOpt, "-K") == 0) {
 			if(i + 1 < argc) {
-				if(input->key == null) {
+				if(input->key == NULL) {
 					input->key = argv[i+1];
 				} else {
 					// TODO: Manage error, duplicated opcode.
@@ -56,7 +55,7 @@
 			}
 		} else if(strcmp(currentOpt, "-iv") == 0) {
 			if(i + 1 < argc) {
-				if(input->iv == null) {
+				if(input->iv == NULL) {
 					input->iv = argv[i+1];
 				} else {
 					// TODO: Manage error, duplicated opcode.
@@ -102,14 +101,14 @@
 	}
 	
 	if(wrongInput(input)) {
-		input = null;
+		input = NULL;
 		// TODO: Manage error, missing parameters.
 	}
 	
 	return input;
 }
 
-enum t_algorithm parseAlgorithm(char *algorithm) {
+t_alg parseAlgorithm(char *algorithm) {
 	char *algorithms[] = {"aes128", "aes192", "aes256", "des"};
 	int elems = sizeof(algorithms) / sizeof(char*);
 	
@@ -123,7 +122,7 @@ enum t_algorithm parseAlgorithm(char *algorithm) {
 	return 0;
 }
 
-enum t_mode parseMode(char *mode) {
+t_mode parseMode(char *mode) {
 	char *modes[] = {"ecb", "cfb", "ofb", "cbc"};
 	int elems = sizeof(modes) / sizeof(char*);
 	
@@ -138,23 +137,23 @@ enum t_mode parseMode(char *mode) {
 }
 
 boolean wrongInput(t_input* input) {
-	if(input->input == null) {
+	if(input->input == NULL) {
 		return TRUE;
-	} else if(input->output != null) {
-		return TRUE;
-	} else if(input->operation != 0) {
+	} else if(input->output != NULL) {
 		return TRUE;
 	} else if(input->operation != 0) {
 		return TRUE;
-	} else if(input->pass != null) {
+	} else if(input->operation != 0) {
 		return TRUE;
-	} else if(input->key != null) {
+	} else if(input->pass != NULL) {
 		return TRUE;
-	} else if(input->iv != null) {
+	} else if(input->key != NULL) {
+		return TRUE;
+	} else if(input->iv != NULL) {
 		return TRUE;
 	} else if(input->algorithm != 0) {
 		return TRUE;
-	} else if(input->validMode != 0) {
+	} else if(input->mode != 0) {
 		return TRUE;
 	}
 	return FALSE;

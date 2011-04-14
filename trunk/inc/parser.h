@@ -8,8 +8,20 @@
 #ifndef _PARSER_
 #define _PARSER_
 
-#include "../inc/types.h"
+#include <sys/types.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
 
-*t_input parseInput(int argc, char *argv[]);
+#include "definitions.h"
+
+t_input * parseInput(int argc, char *argv[]);
+
+boolean wrongInput(t_input* input);
+
+t_mode parseMode(char *mode);
+
+t_alg parseAlgorithm(char *algorithm);
 
 #endif
