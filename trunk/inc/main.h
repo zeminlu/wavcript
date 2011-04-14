@@ -12,5 +12,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include "../inc/types.h"
+#include "../inc/parser.h"
 
 #endif
