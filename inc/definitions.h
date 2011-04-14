@@ -57,4 +57,6 @@
  */
 void varFree(int amm, ...);
 
+#define INVALID_OPT -1;
+
 #endif

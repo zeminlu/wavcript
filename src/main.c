@@ -7,6 +7,10 @@
 
 #include "../inc/main.h"
 
-int main (void){
-    return 0;
+int main (int argc, char* argv[]) {
+
+	t_input input = parseInput(argc, argv);
+	
+	return 0;
 }
+
