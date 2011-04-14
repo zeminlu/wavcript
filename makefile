@@ -16,7 +16,7 @@ vpath %.c $(SRC_DIR)
 #Sets the C compiler used to create object files from source code.
 CC = gcc
 #Sets compiler options.
-CFLAGS = -O -Wall -Wuninitialized -pedantic -errors -fno-builtin -g -c -o
+CFLAGS = -O3 -Wall -Wuninitialized -errors -fno-builtin -m32 -g -c -o
 #Sets the location of the header files.
 INCLUDES = -I $(INC_DIR)
 #Set the libraries variables
@@ -27,10 +27,10 @@ COMPILE.c = $(CC) $(INCLUDES) $(CFLAGS)
 #Sets the linker for the project
 LD = gcc
 #
-LDFLAGS = $(LIBRARIES) -g -o
+LDFLAGS = $(LIBRARIES) -m32 -g -o
 #
 TARGET1 = criptoWavs.bin
-OBJECTS1 = main.o
+OBJECTS1 = main.o parser.o wav.o definitions.o
 
 ###############################################################################
 .SILENT:
@@ -50,6 +50,12 @@ $(TARGET1): $(OBJECTS1)
 
 main.o: main.c main.h
 
+parser.o: parser.c parser.h
+
+wav.o: wav.c wav.h
+    
+definitions.o: definitions.c definitions.h
+    
 cleanObjects:
 	@echo "Clearing Objects..."
 	@rm -f *.o
@@ -58,4 +64,6 @@ cleanObjects:
 clean:
 	@echo "Clearing" $(OUTPUT_DIR) "directory..."
 	@rm -f $(OUTPUT_DIR)*.bin
+	@echo "Clearing Objects..."
+	@rm -f *.o
 	@echo "Done."

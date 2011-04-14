@@ -21,16 +21,6 @@ typedef DWORD FOURCC; 		// Four-character code
 typedef FOURCC CKID;		// Four-character-code chunk identifier
 typedef DWORD CKSIZE;		// 32-bit unsigned size value
 
-struct wavStr {
-	RIFF_CK riff_desc;		// MANDATORY
-	FMT_CK fmt;				// Format Chunk MANDATORY
-	//FACT_CK fact;			// Fact Chunk OPTIONAL
-	//CUE_CK cue;			// Cue points Chunk OPTIONAL
-	//PLIST_CK	plist;		// Playlist Chunk OPTIONAL
-	//LIST_CK list;			// Associated data list Chunk OPTIONAL 
-	// more optional data...
-	DATA_CK data;			// Wave Data Chunk MANDATORY
-};
 
 typedef struct {
 	CKID chunkID;			// 'RIFF' 
@@ -46,7 +36,7 @@ typedef struct {
 	WORD wChannels;			// Number of channels:1, mono; 2, stereo
 	DWORD dwSamplesPerSec;	// Sampling rate: Mhz
 	DWORD dwAvgBytesPerSec; 
-	WORD wBlockAlign 
+    WORD wBlockAlign;
 	WORD wBitsPerSample;	//8, 16, etc.
 	WORD extraParamSize;	// If PCM, doesn't exist
 	BYTE *extraParams;		//space for extra params
@@ -57,6 +47,17 @@ typedef struct {
 	CKSIZE chunkSize;		// Bytes of data 
 	BYTE *soundData;		// Sound data.
 } DATA_CK;
+
+struct wavStr {
+	RIFF_CK riff_desc;		// MANDATORY
+	FMT_CK fmt;				// Format Chunk MANDATORY
+	//FACT_CK fact;			// Fact Chunk OPTIONAL
+	//CUE_CK cue;			// Cue points Chunk OPTIONAL
+	//PLIST_CK	plist;		// Playlist Chunk OPTIONAL
+	//LIST_CK list;			// Associated data list Chunk OPTIONAL 
+	// more optional data...
+	DATA_CK data;			// Wave Data Chunk MANDATORY
+};
 
 typedef enum {
 	ENC = 1,

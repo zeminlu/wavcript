@@ -12,7 +12,7 @@
 #include <limits.h>
 #include <stdarg.h>
 
-#include "../inc/types.h"
+#include "types.h"
 
 /**
  * \def TRUE

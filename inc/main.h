@@ -12,7 +12,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "../inc/types.h"
-#include "../inc/parser.h"
+#include <string.h>
+
+#include "parser.h"
+#include "definitions.h"
+#include "wav.h"
 
 #endif
