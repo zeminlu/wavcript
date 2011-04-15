@@ -8,9 +8,9 @@
 #include "../inc/main.h"
 
 int main (int argc, char* argv[]) {
-
+    long res;
 	t_input * inputStruct = parseInput(argc, argv);
-    void *sound;
+    void *sound, *cryptSound;
     WaveFile *wf = malloc(sizeof(WaveFile));
     WaveFile_Read("../la-fa.wav", wf, &sound);
     printf("riff: %c%c%c%c\nfilesize: %d\nrifftype: %c%c%c%c\nchunk_format_id: %c%c%c%c\nchunkformatsize: %d\n", 
@@ -23,13 +23,14 @@ int main (int argc, char* argv[]) {
         wf->wBitsPerSample, wf->chunk_data_id[0], wf->chunk_data_id[1], 
         wf->chunk_data_id[2], wf->chunk_data_id[3], wf->chunkdatasize);
     
-    void *invSound = malloc(wf->chunkdatasize);
-    memcpy(invSound, (char *) sound + (wf->chunkdatasize / 2), wf->chunkdatasize / 2);
-    memcpy((char *) invSound + (wf->chunkdatasize / 2), sound, wf->chunkdatasize / 2);
+    cryptSound = malloc(wf->chunkdatasize);
     
-    WaveFile_Write("../la-fa-post.wav", wf, invSound);
+    //res = cryptWithPass(sound, wf->chunkdatasize, cryptSound, wf->operation, wf->algorithm, wf->mode, char *pass);
+    res = cryptWithPass(sound, wf->chunkdatasize, cryptSound, 1, 1, 0, "12345678");
+        
+    WaveFile_Write("../la-fa-post.wav", wf, cryptSound);
     
-    varFree(2, sound, invSound);
+    varFree(2, sound, cryptSound);
 	
 	return 0;
 }

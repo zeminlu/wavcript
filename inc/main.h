@@ -17,5 +17,6 @@
 #include "parser.h"
 #include "definitions.h"
 #include "wav.h"
+#include "crypto.h"
 
 #endif

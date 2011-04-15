@@ -60,8 +60,8 @@ struct wavStr {
 };
 
 typedef enum {
-	ENC = 1,
-	DEC
+	DEC = 0,
+	ENC
 } t_opt;
 
 typedef enum {
@@ -82,9 +82,9 @@ typedef struct {
 	char *input;			// Input file's path
 	char *output;			// Output file's path
 	t_opt operation;		// Encryption or decryption
-	char *pass;				// Password
-	char *key;				// Key generated from password
-	char *iv;				// Initialization vector
+	char *pass;	// Password
+	char *key;		// Key generated from password
+	char *iv;		// Initialization vector
 	t_alg algorithm;		// Encryption or decryption algorithm used.
 	t_mode mode;			// Encryption or decryption mode used.
 } t_input;
