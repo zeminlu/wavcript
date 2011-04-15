@@ -27,10 +27,10 @@ COMPILE.c = $(CC) $(INCLUDES) $(CFLAGS)
 #Sets the linker for the project
 LD = gcc
 #
-LDFLAGS = $(LIBRARIES) -m32 -g -o
+LDFLAGS = $(LIBRARIES) -m32 -lcrypto -g -o
 #
 TARGET1 = criptoWavs.bin
-OBJECTS1 = main.o parser.o wav.o definitions.o
+OBJECTS1 = main.o parser.o wav.o definitions.o crypto.o
 
 ###############################################################################
 .SILENT:
@@ -55,7 +55,9 @@ parser.o: parser.c parser.h
 wav.o: wav.c wav.h
     
 definitions.o: definitions.c definitions.h
-    
+
+crypto.o : crypto.c crypto.h
+
 cleanObjects:
 	@echo "Clearing Objects..."
 	@rm -f *.o
