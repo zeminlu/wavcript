@@ -9,7 +9,34 @@
 
 int main (int argc, char* argv[]) {
     long res;
-	t_input * inputStruct = parseInput(argc, argv);
+	t_input *inputStruct = parseInput(argc, argv);
+	
+	if(inputStruct == NULL) {
+		printf("TODO MAL \n");
+		printf("input = %s\n", inputStruct->input);
+		printf("output = %s\n", inputStruct->output);
+		printf("operation = %d\n", inputStruct->operation);
+		printf("pass = %s\n", inputStruct->pass);
+		printf("key = %s\n", inputStruct->key);
+		printf("iv = %s\n", inputStruct->iv);
+		printf("algorithm = %d\n", inputStruct->algorithm);
+		printf("mode = %d\n", inputStruct->mode);
+		printf("\n");
+		return 0;
+	} else {
+		printf("TODO BIEN!!!! \n");
+		printf("input = %s\n", inputStruct->input);
+		printf("output = %s\n", inputStruct->output);
+		printf("operation = %d\n", inputStruct->operation);
+		printf("pass = %s\n", inputStruct->pass);
+		printf("key = %s\n", inputStruct->key);
+		printf("iv = %s\n", inputStruct->iv);
+		printf("algorithm = %d\n", inputStruct->algorithm);
+		printf("mode = %d\n", inputStruct->mode);
+		printf("\n");
+		return 0;
+	}
+	
     void *sound, *cryptSound;
     WaveFile *wf = malloc(sizeof(WaveFile));
     WaveFile_Read("../la-fa.wav", wf, &sound);
