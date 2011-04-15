@@ -18,6 +18,8 @@
 
 t_input * parseInput(int argc, char *argv[]);
 
+void initInWrongValues(t_input* input);
+
 boolean wrongInput(t_input* input);
 
 t_mode parseMode(char *mode);

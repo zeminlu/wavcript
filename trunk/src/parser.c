@@ -9,10 +9,12 @@
 
 t_input * parseInput(int argc, char *argv[]) {
 	t_input *input = malloc(sizeof(t_input));
+	initInWrongValues(input);
 	
-	int i = 0;
-	for(i = 0; i < argc; i++) {
+	int i = 1;
+	for(i = 1; i < argc; i++) {
 		char *currentOpt = argv[i];
+
 		if(strcmp(currentOpt, "-in") == 0) {
 			if(i + 1 < argc) {
 				if(input->input == NULL) {
@@ -65,7 +67,7 @@ t_input * parseInput(int argc, char *argv[]) {
 			}
 		} else if(strcmp(currentOpt, "-a") == 0) {
 			if(i + 1 < argc) {
-				if(input->algorithm == 0) {
+				if(input->algorithm == INVALID_OPT) {
 					input->algorithm = parseAlgorithm(argv[i+1]);
 				} else {
 					// TODO: Manage error, duplicated opcode.
@@ -75,7 +77,7 @@ t_input * parseInput(int argc, char *argv[]) {
 			}
 		} else if(strcmp(currentOpt, "-m") == 0) {
 			if(i + 1 < argc) {
-				if(input->mode == 0) {
+				if(input->mode == INVALID_OPT) {
 					input->mode = parseMode(argv[i+1]);
 				} else {
 					// TODO: Manage error, duplicated opcode.
@@ -84,7 +86,7 @@ t_input * parseInput(int argc, char *argv[]) {
 				// TODO: Manage error, incorrect input.
 			}
 		} else if(strcmp(currentOpt, "-d") == 0) {
-			if(input->operation == 0) {
+			if(input->operation == INVALID_OPT) {
 				input->operation = DEC;
 			} else{
 				// TODO: Manage error, duplicated opcode.
@@ -136,24 +138,47 @@ t_mode parseMode(char *mode) {
 	return 0;
 }
 
-boolean wrongInput(t_input* input) {
+void initInWrongValues(t_input *input) {
+	input->input = NULL;
+	input->output = NULL;
+	input->operation = INVALID_OPT;
+	input->pass = NULL;
+	input->key = NULL;
+	input->iv = NULL;
+	input->algorithm = INVALID_OPT;
+	input->mode = INVALID_OPT;
+}
+
+boolean wrongInput(t_input *input) {
 	if(input->input == NULL) {
 		return TRUE;
-	} else if(input->output != NULL) {
+	}
+	if(input->output == NULL) {
 		return TRUE;
-	} else if(input->operation != 0) {
+	}
+	if(input->operation == INVALID_OPT) {
 		return TRUE;
-	} else if(input->operation != 0) {
+	}
+	if(input->pass == NULL) {
+		if(input->key == NULL || input->iv == NULL) {
+			return TRUE;
+		}
+	}
+	if(input->pass != NULL) {
+		if(input->key != NULL || input->iv != NULL) {
+			return TRUE;
+		}
+	}
+	if(input->algorithm == INVALID_OPT) {
 		return TRUE;
-	} else if(input->pass != NULL) {
+	}
+	if(input->algorithm > 3) {
 		return TRUE;
-	} else if(input->key != NULL) {
+	}
+	if(input->mode == INVALID_OPT) {
 		return TRUE;
-	} else if(input->iv != NULL) {
-		return TRUE;
-	} else if(input->algorithm != 0) {
-		return TRUE;
-	} else if(input->mode != 0) {
+	}
+	if(input->mode > 3) {
 		return TRUE;
 	}
 	return FALSE;
