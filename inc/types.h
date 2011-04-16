@@ -65,14 +65,14 @@ typedef enum {
 } t_opt;
 
 typedef enum {
-	AES128 = 1,
+	AES128 = 0,
 	AES192,
 	AES256,
 	DES
 } t_alg;
 
 typedef enum {
-	ECB = 1,
+	ECB = 0,
 	CFB,
 	OFB,
 	CBC
@@ -82,9 +82,9 @@ typedef struct {
 	char *input;			// Input file's path
 	char *output;			// Output file's path
 	t_opt operation;		// Encryption or decryption
-	char *pass;	// Password
-	char *key;		// Key generated from password
-	char *iv;		// Initialization vector
+	char *pass;	            // Password
+	char *key;		        // Key generated from password
+	char *iv;		        // Initialization vector
 	t_alg algorithm;		// Encryption or decryption algorithm used.
 	t_mode mode;			// Encryption or decryption mode used.
 } t_input;

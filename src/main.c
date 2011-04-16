@@ -11,7 +11,7 @@ int main (int argc, char* argv[]) {
     long res;
 	t_input *inputStruct = parseInput(argc, argv);
 	
-	if(inputStruct == NULL) {
+	/*if(inputStruct == NULL) {
 		printf("TODO MAL \n");
 		printf("input = %s\n", inputStruct->input);
 		printf("output = %s\n", inputStruct->output);
@@ -35,7 +35,7 @@ int main (int argc, char* argv[]) {
 		printf("mode = %d\n", inputStruct->mode);
 		printf("\n");
 		return 0;
-	}
+	}*/
 	
     void *sound, *cryptSound;
     WaveFile *wf = malloc(sizeof(WaveFile));
