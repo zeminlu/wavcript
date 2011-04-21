@@ -10,6 +10,12 @@
 int main (int argc, char* argv[]) {
     long res;
 	t_input *inputStruct = parseInput(argc, argv);
+
+	//Preconditions check.
+	if (inputStruct == NULL) {
+		printf("Wrong input.\n");
+		return EXIT_FAILURE;
+	}
 	
 	/*if(inputStruct == NULL) {
 		printf("TODO MAL \n");
@@ -39,7 +45,9 @@ int main (int argc, char* argv[]) {
 	
     void *sound, *cryptSound;
     WaveFile *wf = malloc(sizeof(WaveFile));
-    WaveFile_Read("../la-fa.wav", wf, &sound);
+    //WaveFile_Read("../la-fa.wav", wf, &sound);
+	//Levantamos el wav.
+    WaveFile_Read(inputStruct->input, wf, &sound);
     printf("riff: %c%c%c%c\nfilesize: %d\nrifftype: %c%c%c%c\nchunk_format_id: %c%c%c%c\nchunkformatsize: %d\n", 
         wf->riff[0], wf->riff[1], wf->riff[2], wf->riff[3], wf->filesize, wf->rifftype[0], wf->rifftype[1], 
         wf->rifftype[2], wf->rifftype[3], wf->chunk_format_id[0], wf->chunk_format_id[1], wf->chunk_format_id[2], 
@@ -53,9 +61,11 @@ int main (int argc, char* argv[]) {
     cryptSound = malloc(wf->chunkdatasize);
     
     //res = cryptWithPass(sound, wf->chunkdatasize, cryptSound, wf->operation, wf->algorithm, wf->mode, char *pass);
-    res = cryptWithPass(sound, wf->chunkdatasize, cryptSound, 1, 1, 0, "12345678");
+    //res = cryptWithPass(sound, wf->chunkdatasize, cryptSound, 1, 1, 0, "12345678");
         
-    WaveFile_Write("../la-fa-post.wav", wf, cryptSound);
+    res = cryptWithPass(sound, wf->chunkdatasize, cryptSound, inputStruct->operation, inputStruct->algorithm, inputStruct->mode, inputStruct->pass);
+    //WaveFile_Write("../la-fa-post.wav", wf, cryptSound);
+    WaveFile_Write(inputStruct->output, wf, cryptSound);
     
     varFree(2, sound, cryptSound);
 	

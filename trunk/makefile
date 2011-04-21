@@ -29,7 +29,7 @@ LD = gcc
 #
 LDFLAGS = $(LIBRARIES) -m32 -lcrypto -g -o
 #
-TARGET1 = criptoWavs.bin
+TARGET1 = criptoWavs
 OBJECTS1 = main.o parser.o wav.o definitions.o crypto.o
 
 ###############################################################################
