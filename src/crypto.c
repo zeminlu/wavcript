@@ -74,5 +74,5 @@ int cryptMe(void *inData, long data_len, void *outData, evpCipherFunc type, t_op
         return -1;
     }
     
-    return outl + templ;
+    return outl;
 }
