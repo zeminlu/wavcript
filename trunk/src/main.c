@@ -17,7 +17,7 @@ int main (int argc, char* argv[]) {
 		return EXIT_FAILURE;
 	}
 	
-	/*if(inputStruct == NULL) {
+/*	if(inputStruct == NULL) {
 		printf("TODO MAL \n");
 		printf("input = %s\n", inputStruct->input);
 		printf("output = %s\n", inputStruct->output);
@@ -28,7 +28,7 @@ int main (int argc, char* argv[]) {
 		printf("algorithm = %d\n", inputStruct->algorithm);
 		printf("mode = %d\n", inputStruct->mode);
 		printf("\n");
-		return 0;
+//		return 0;
 	} else {
 		printf("TODO BIEN!!!! \n");
 		printf("input = %s\n", inputStruct->input);
@@ -40,9 +40,9 @@ int main (int argc, char* argv[]) {
 		printf("algorithm = %d\n", inputStruct->algorithm);
 		printf("mode = %d\n", inputStruct->mode);
 		printf("\n");
-		return 0;
-	}*/
-	
+//		return 0;
+	}
+*/	
     void *sound, *cryptSound;
     WaveFile *wf = malloc(sizeof(WaveFile));
     //WaveFile_Read("../la-fa.wav", wf, &sound);

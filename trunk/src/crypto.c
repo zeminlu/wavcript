@@ -16,7 +16,7 @@ evpCipherFunc evpCipherFuncs[4][4] = {
 
 long cryptWithPass(void *inData, long data_len, void *outData, t_opt crypt_mode, t_alg algorithm, t_mode mode, char *pass){
     evpCipherFunc type = evpCipherFuncs[mode][algorithm];
-    int keySize = (algorithm == AES256) ? 32 : (algorithm == AES192 ? 24 : 16);
+    int keySize = (algorithm == AES256) ? 32 : (algorithm == AES192 ? 24 : (algorithm == AES128 ? 16 : 8));
     int derivedKeySize, cryptSize;
     unsigned char *key = malloc(keySize);
     unsigned char *iv = malloc(keySize);    
@@ -43,7 +43,7 @@ long cryptWithKey(void *inData, long data_len, void *outData, t_opt crypt_mode, 
 }
 
 int cryptMe(void *inData, long data_len, void *outData, evpCipherFunc type, t_opt crypt_mode, unsigned char *key, unsigned char *iv){
-    int outl, templ;
+    int outl/*, templ*/;
     
     EVP_CIPHER_CTX ctx;
     
