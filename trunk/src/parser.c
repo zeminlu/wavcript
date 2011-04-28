@@ -116,6 +116,7 @@ t_alg parseAlgorithm(char *algorithm) {
 	
 	int i = 0;
 	for(i = 0; i < elems; i++) {
+	    sToLower(&algorithm);
 		if(strcmp(algorithm, algorithms[i]) == 0) {
 			return i;
 		}
@@ -130,6 +131,7 @@ t_mode parseMode(char *mode) {
 	
 	int i = 0;
 	for(i = 0; i < elems; i++) {
+        sToLower(&mode);
 		if(strcmp(mode, modes[i]) == 0) {
 			return i;
 		}

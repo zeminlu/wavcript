@@ -47,4 +47,6 @@ void reverse(char s[]);
  */
 void itoa(int n, char s[]);
 
+void sToLower(char **string);
+
 #endif

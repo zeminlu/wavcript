@@ -6,6 +6,7 @@
  */
  
 #include <string.h>
+#include <ctype.h>
 #include "../inc/cutils.h"
 
 void reverse(char s[]){
@@ -32,4 +33,12 @@ void itoa(int n, char s[]){
         s[i++] = '-';
     s[i] = '\0';
     reverse(s);
+}
+
+void sToLower(char **string){
+    int i;
+    for (i = 0 ; i < strlen(*string) ; ++i){
+        (*string)[i] = tolower((*string)[i]);
+    }
+    return;
 }
