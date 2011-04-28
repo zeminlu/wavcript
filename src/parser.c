@@ -92,7 +92,7 @@ t_input * parseInput(int argc, char *argv[]) {
 				// TODO: Manage error, duplicated opcode.
 			}
 		} else if(strcmp(currentOpt, "-e") == 0) {
-			if(input->mode) {
+			if(input->operation == INVALID_OPT) {
 				input->operation = ENC;
 			} else {
 				// TODO: Manage error, duplicated opcode.
@@ -121,14 +121,12 @@ t_alg parseAlgorithm(char *algorithm) {
 			return i;
 		}
 	}
-	
-	return 0;
+	return INVALID_OPT;
 }
 
 t_mode parseMode(char *mode) {
 	char *modes[] = {"ecb", "cfb", "ofb", "cbc"};
 	int elems = sizeof(modes) / sizeof(char*);
-	
 	int i = 0;
 	for(i = 0; i < elems; i++) {
         sToLower(&mode);
@@ -136,8 +134,7 @@ t_mode parseMode(char *mode) {
 			return i;
 		}
 	}
-	
-	return 0;
+	return INVALID_OPT;
 }
 
 void initInWrongValues(t_input *input) {
