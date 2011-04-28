@@ -13,8 +13,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "definitions.h"
+#include "cutils.h"
 
 t_input * parseInput(int argc, char *argv[]);
 

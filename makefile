@@ -30,7 +30,7 @@ LD = gcc
 LDFLAGS = $(LIBRARIES) -m32 -lcrypto -g -o
 #
 TARGET1 = criptoWavs
-OBJECTS1 = main.o parser.o wav.o definitions.o crypto.o
+OBJECTS1 = main.o parser.o wav.o definitions.o crypto.o cutils.o
 
 ###############################################################################
 .SILENT:
@@ -56,7 +56,9 @@ wav.o: wav.c wav.h
     
 definitions.o: definitions.c definitions.h
 
-crypto.o : crypto.c crypto.h
+crypto.o: crypto.c crypto.h
+
+cutils.o: cutils.c cutils.h
 
 cleanObjects:
 	@echo "Clearing Objects..."

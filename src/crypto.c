@@ -43,7 +43,7 @@ long cryptWithKey(void *inData, long data_len, void *outData, t_opt crypt_mode, 
 }
 
 int cryptMe(void *inData, long data_len, void *outData, evpCipherFunc type, t_opt crypt_mode, unsigned char *key, unsigned char *iv){
-    int outl/*, templ*/;
+    int outl, templ;
     
     EVP_CIPHER_CTX ctx;
     
@@ -54,25 +54,27 @@ int cryptMe(void *inData, long data_len, void *outData, evpCipherFunc type, t_op
         return -1;
     }
     
+    EVP_CIPHER_CTX_set_padding(&ctx, 0);
+    
     if (EVP_CipherUpdate(&ctx, outData, &outl, inData, data_len) == 0){
         printf("Error en cipherUpdate\n");
         return -1;
     }
     
-    /*if (EVP_CipherFinal_ex(&ctx, (unsigned char *) outData + outl, &templ) == 0){
+    if (EVP_CipherFinal_ex(&ctx, ((unsigned char *) outData) + outl, &templ) == 0){
         printf("Error en cipherFinal\n");
         return -1;
-    }*/
+    }
     
     if (EVP_CIPHER_CTX_cleanup(&ctx) == 0){
         printf("Error en cipherCleanup\n");
         return -1;
     }
         
-    if (outl /*+ templ*/ != data_len){
-        printf("El tamaño de los datos encriptados es distinto al de los datos desencriptados, outl = %d\n", outl);
+    if (outl + templ != data_len){
+        printf("El tamaño de los datos encriptados es distinto al de los datos desencriptados, outl = %d, templ = %d\n", outl, templ);
         return -1;
     }
     
-    return outl;
+    return outl + templ;
 }

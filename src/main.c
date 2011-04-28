@@ -17,7 +17,7 @@ int main (int argc, char* argv[]) {
 		return EXIT_FAILURE;
 	}
 	
-/*	if(inputStruct == NULL) {
+	if(inputStruct == NULL) {
 		printf("TODO MAL \n");
 		printf("input = %s\n", inputStruct->input);
 		printf("output = %s\n", inputStruct->output);
@@ -42,7 +42,7 @@ int main (int argc, char* argv[]) {
 		printf("\n");
 //		return 0;
 	}
-*/	
+	
     void *sound, *cryptSound;
     WaveFile *wf = malloc(sizeof(WaveFile));
     //WaveFile_Read("../la-fa.wav", wf, &sound);
