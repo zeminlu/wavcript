@@ -1,0 +1,67 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[vcentering,dvips]{geometry}
+
+\newcommand{\linux}{\mbox{\sc LINUX}}
+\newcommand{\awk}{\mbox{\sc awk}}
+\newcommand{\sort}{\mbox{\sc sort}}
+
+\newcommand {\articleTitle}{Informe Trabajo Pr\'actico 1}
+
+% misc
+\newcommand {\murl}[2]{\href{#1}{#2}}
+
+% marcas / nombres de cosas usadas 
+\usepackage[spanish]{babel}
+\usepackage{graphicx}
+\usepackage{graphics}
+\usepackage[utf8]{inputenc}
+\usepackage{subfigure}
+\usepackage[pdftitle=\articleTitle
+	pdfauthor={},
+	pdfsubject={},
+	pdfkeywords={} 
+]{hyperref}
+
+\usepackage{verbatim}
+\usepackage{rotating}
+% inclusion de codigo fuentes
+\usepackage{listings}
+\lstloadlanguages{c}
+
+\author
+{
+	Pablo Giorgi,
+	Santiago Perez De Rosso,
+	Luciano Zemin
+}
+
+\date{Abril 2011}
+% Title
+\title{\articleTitle}
+
+\begin{document}
+\bibliographystyle{acm}
+\maketitle
+
+\tableofcontents
+
+\section{Introducción}
+
+En el presente informe se presenta las soluciones correspondientes al descifrado
+de los archivos provistos por la c\'atedra y el an\'alisis de las cuestiones
+planteadas en el punto 4 del Trabajo Pr\'actico 1.
+
+\section{Descifrado de los archivos provistos por la c\'atedra}
+
+Se desencriptaron los 6 archivos provistos por la c\'atedra
+\emph{fun6AESCBC.wav}, \emph{fun6AESCFB.wav}, \emph{fun6AESOFB.wav},
+\emph{fun6DESCBC.wav}, \emph{fun6DESOFB.wav} utilizando la clave \emph{sorpresa}
+con el algoritmo y modo indicado en el nombre del archivo. Se obtuvo
+el mismo fragmento de la canción \emph{El matador} de los \emph{Fabulosos Cadillacs}
+en todos los casos.
+
+\section{An\'alisis de las cuestiones planteadas en el punto 4 del Trabajo Pr\'actico 1}
+
+Para analizar el primer punto se toma el archivo \emph{fa-do.wav}
+
+\end{document}
