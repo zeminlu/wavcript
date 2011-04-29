@@ -1,0 +1,21 @@
+Dado que la cantidad de bloques que se cagan al romper un bit de lo que está encriptado y luego desencriptarlo, es 1 + n/r, donde n es el tamaño del bloque (16 en AES, 8 en DES) y r es el tamaño de bloque de cfb, que en nuestro caso es 8 (la funcion de cifrado si se fijan en el codigo es cfb8), la cantidad de bytes cagados en AES (AES128) debería ser 1 + 16 = 17. Adjunto el resultado de la comparacion byte a byte.
+
+richards-mac:wavcript Luciano$ cmp -l testfiles/fun6/fun6AESCFB-d.wav testfiles/fun6/fun6AESCFBmod-d.wav 
+1817504 357 356
+1817505  40 225
+1817506 365 346
+1817507 246 245
+1817508  27 360
+1817509 143 324
+1817510   6 333
+1817511 311 267
+1817512  17  76
+1817513 362 255
+1817514  14 370
+1817515 353 132
+1817516 370 271
+1817517   4 240
+1817518  13  25
+1817519  12 224
+1817520 360 376
+
