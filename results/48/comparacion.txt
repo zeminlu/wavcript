@@ -1,0 +1,7 @@
+Salida del cpm:
+
+cmp -l results/48/fa-do.wav results/48/fa-doDesencriptado.wav 
+ 4673 121 120
+
+
+Solo difieren en un byte lo que es lo esperado para OFB. Solo difieren en el byte en el cual se produjo el error.
