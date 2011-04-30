@@ -62,8 +62,12 @@ int main (int argc, char* argv[]) {
     
     //res = cryptWithPass(sound, wf->chunkdatasize, cryptSound, wf->operation, wf->algorithm, wf->mode, char *pass);
     //res = cryptWithPass(sound, wf->chunkdatasize, cryptSound, 1, 1, 0, "12345678");
-        
-    res = cryptWithPass(sound, wf->chunkdatasize, cryptSound, inputStruct->operation, inputStruct->algorithm, inputStruct->mode, inputStruct->pass);
+       
+	if (inputStruct->key != NULL) {
+    	res = cryptWithKey(sound, wf->chunkdatasize, cryptSound, inputStruct->operation, inputStruct->algorithm, inputStruct->mode, inputStruct->key, inputStruct->iv);
+	} else {
+    	res = cryptWithPass(sound, wf->chunkdatasize, cryptSound, inputStruct->operation, inputStruct->algorithm, inputStruct->mode, inputStruct->pass);
+	}
     //WaveFile_Write("../la-fa-post.wav", wf, cryptSound);
     WaveFile_Write(inputStruct->output, wf, cryptSound);
     
