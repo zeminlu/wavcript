@@ -1,3 +1,8 @@
+El original:
+
+cmp -l results/48/fa-doDESOFB.wav results/48/fa-doDESOFBModificado.wav 
+ 4673 110 111
+
 Salida del cpm:
 
 cmp -l results/48/fa-do.wav results/48/fa-doDesencriptado.wav 
