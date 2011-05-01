@@ -65,6 +65,35 @@ en todos los casos.
 Para analizar el primer punto se toma el archivo \emph{fa-do.wav}
 
 ....
+Para el primer punto, 4.1, se toma el archivo \emph{fa-do.wav} y se lo encripta
+con DES en modo CBC, ECB y OFB y se analizan los resultados obtenidos.
+Un resultado interesante para analizar es que as\'i como se ven bloques repetidos
+en el archivo \emph{fa-do.wav} original tambi\'en se ven bloques repetidos en el 
+resultado de encriptar el archivo original con DES ECB. Esta es una de las propiedades
+del modo de operaci\'on ECB: bloques id\'enticos en el texto plano resultan en 
+bloques id\'enticos en el texto cifrado. En la figura \ref{fig:41Original} se
+muestran 2 fragmentos del archivo original donde se puede ver que se tienen bloques
+repetidos.
+\begin{figure}
+	\begin{center}
+		\subfigure{\includegraphics[scale=0.6]{../results/41/fadoRepetido1.png}}
+		\subfigure{\includegraphics[scale=0.6]{../results/41/fadoRepetido2.png}}
+	\end{center}
+	\caption{Visualización del archivo original \emph{fa-do.wav} donde se pueden ver
+		fragmentos repetidos.}
+	\label{fig:41Original}
+\end{figure}
+\begin{figure}
+	\begin{center}
+		\subfigure{\includegraphics[scale=0.6]{../results/41/fadoECBRepetido1.png}}
+		\subfigure{\includegraphics[scale=0.6]{../results/41/fadoECBRepetido2.png}}
+	\end{center}
+	\caption{Visualización del archivo \emph{fa-doDESECB.wav} donde se pueden ver
+		fragmentos repetidos.}
+	\label{fig:41ECB}
+\end{figure}
+En la figura \ref{fig:41ECB} se puede ver como el texto cifrado tiene tambien bloques
+repetidos en el mismo lugar. 
 
 Respecto al punto 4.8 se encripta el archivo \emph{fa-do.wav} utilizando DES OFB.
 Se cambia un bit del texto cifrado (en el byte 4673) y se desencripta. Al comparar
@@ -76,7 +105,7 @@ se obtiene
 \begin{lstlisting}
  4673 121 120
 \end{lstlisting}
-Esto indica que en el byte 4673 hay una diferencia de un bit.
+Esto indica que en el byte 4673 hay una diferencia de un bit y que solo es esta la diferencia.
 \begin{figure}
 	\begin{center}
 		\subfigure{\includegraphics[scale=0.6]{../results/48/fa-do.png}}
@@ -92,7 +121,7 @@ esto solo afecta el descifrado de solo ese caracter. Y dado el texto plano se va
 los bits complementados respecto al original sin error en las mismas posiciones donde 
 se cambiaron los bits del texto cifrado. En la figura \ref{fig:48} se muestra una 
 parte del archivo original \emph{fa-do.wav} y el archivo obtenido al desencriptar
-el cifrado alterado.
+el cifrado alterado donde se puede ver la diferencia.
 
 Finalmente, respecto al punto 4.9 se utiliza DES con el m\'etodo ECB para encriptar
 los archivos \emph{do-fa.wav} y \emph{si-mi.wav} con el objetivo de comparar la salida
