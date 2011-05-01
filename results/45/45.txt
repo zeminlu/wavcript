@@ -1,0 +1,60 @@
+4.5:
+
+A partir del archivo de audio provisto por la c\'atedra \emph{la-fa.wav}, se lo encripta usando DES
+en modo CBC. Una vez que se obtiene el archivo encriptado se le modifica un bit, se lo desencripta y 
+se compara el archivo obtenido con el original antes de ser encriptado.\\
+Comparando a nivel byte ambos archivos se observa que son id\'enticos exceptuando 9 bytes. De estos 9 bytes,
+8 son los que se corresponden con el bloque al que se le cambi\'o el bit, y el noveno es el byte del siguiente
+bloque que se corresponde en posici\'on con el que se modific\'o en el bloque anterior.
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Byte & Valor en el original & Valor en el modificado\\
+\hline
+\hline
+141 & 31 & 222\\
+142 & 316 & 52\\
+143 & 356 & 42\\
+144 & 345 & 262\\
+145 & 4 & 300\\
+146 & 377 & 322\\
+147 & 46 & 344\\
+148 & 30 & 144\\
+156 & 146 & 147\\
+\hline
+\end{tabular} \\
+\end{center}
+\caption{Tabla donde se muestra el valor del byte indicado en el archivo original y en el archivo desencriptado despu\'es de la modificaci\'on.}
+\label{table45a}
+\end{table}
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Byte & Valor en el original & Valor en el modificado\\
+\hline
+\hline
+148 & 60 & 61\\
+\hline
+\end{tabular} \\
+\end{center}
+\caption{Tabla donde se muestra el valor del byte indicado en el archivo encriptado original y en el archivo encriptado modificado.}
+\label{table45b}
+\end{table}
+
+En la tabla \ref{table44a} se muestra una comparaci\'on entre el archivo original y el archivo desencriptado a partir del que hab\'ia sufrido 
+la modificaci\'on del bit. Se observa que la diferencia entre ambos es de exactamente 8 bytes consecutivos (1 bloque) y de un noveno byte del 
+bloque siguiente, el cual es el que se encuentra en la posici\'on que se corresponde con el byte modificado del bloque anterior.\\
+En la tabla \ref{table44b} se muestra una comparaci\'on entre el archivo encriptado antes y despu\'es de ser modificado. Se observa que
+el cambio es de un bit.\\
+A partir de ambas tablas se puede concluir que un cambio de un bit en los archivos encriptados produce una modificaci\'on de un bloque completo
+correspondiente al que se sufri\'o la modificaci\'on, y del byte del siguiente que se corresponde en posici\'on con el modificado en el archivo 
+encriptado.\\
+Tal comportamiento se debe a la forma en la que desencripta. Los 8 bytes del bloque que fue modificado en el archivo encriptado, se desencriptan
+diferentes, dado que al entrar el texto cifrado modificado a la funci\'on de desencripci\'on, \'esta retorna un texto plano diferente. El noveno
+byte que aparece diferente al original, se encuentra en el bloque siguiente al que fue modificado, y su existencia se debe a que una vez que la 
+funci\'on de desencripci\'on desencript\'o el texto cifrado correspondiente al bloque aplica un \emph{OR} con el texto cifrado del bloque anterior, 
+el cual ten\'ia un bit modificado. Es por tal motivo que el bloque siguiente aparece con un byte diferente al original.
