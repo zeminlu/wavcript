@@ -1,0 +1,3 @@
+NO SE DONDE AGREGAR ESTO, LO PONGO ACÁ PARA QUE LUEGO LO METAMOS EN EL INFORME DONDE CORRESPONDA.
+
+Se realizó la desencripción de todos los archivos con prefijo fun6, utilizando distintos los algoritmos AES128 y DES, y distintos modos de encadenamiento, según el nombre del archivo lo indicase. Para la desencripción se utilizó la password 'sorpresa' proveída por la cátedra. En todos los casos, el resultado obtenido fue la canción El Matador de Los Fabulosos Cadillacs.
