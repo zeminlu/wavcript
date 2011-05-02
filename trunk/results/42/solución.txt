@@ -1,0 +1,1 @@
+Idem ejercicio 4.1, a excepción del cambio de tamaño de la clave y vector de inicialización, que se duplican, y el tamaño del bloque de cifrado que a raíz de esto también se modifica, a excepción del modo CFB en el cual el tamaño del bloque de cifrado siempre se mantiene en 8 bits dado que se utiliza la función de cifrado cfb8(). 
