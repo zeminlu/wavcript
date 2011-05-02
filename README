@@ -1,0 +1,6 @@
+Compilación:
+Posicionarse en la carpeta raíz y ejecutar 'make'
+
+Ejecución:
+El binario criptoWav se encuentra luego de la compilación, en la carpeta 'bin'
+Correr dicho ejecutable con los parámetros requeridos por la cátedra.
