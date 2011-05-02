@@ -47,7 +47,7 @@
 
 \section{Introducción}
 
-En el presente informe se presenta las soluciones correspondientes al descifrado
+En el presente informe se exponen las soluciones correspondientes al descifrado
 de los archivos provistos por la c\'atedra y el an\'alisis de las cuestiones
 planteadas en el punto 4 del Trabajo Pr\'actico 1.
 
@@ -90,10 +90,10 @@ repetidos.
 		fragmentos repetidos.}
 	\label{fig:41ECB}
 \end{figure}
-En la figura \ref{fig:41ECB} se puede ver como el texto cifrado tiene tambien bloques
+En la figura \ref{fig:41ECB} se puede ver como el texto cifrado tiene tambi\'en bloques
 repetidos en el mismo lugar. Otro resultado interesante a analizar es que la salida obtenida al usar
 OFB y CFB tienen el primer bloque igual. En la figura \ref{fig:41OFBCFB} se puede ver
-como el primer bloque que se encripta (el header no se encripta) son iguales.
+c\'omo el primer bloque que se encripta (el header no se encripta) resulta igual en ambos casos.
 \begin{figure}
 	\begin{center}
 		\subfigure{\includegraphics[scale=0.6]{../results/41/OFB.png}}
@@ -104,7 +104,7 @@ como el primer bloque que se encripta (el header no se encripta) son iguales.
 \end{figure}
 
 \subsection{Ejercicio 4.2}
-Idem ejercicio 4.1, a excepci\'on del cambio de tama\~no de la clave y vector de inicializaci\'on, que se duplican, y el tama\~no del bloque de cifrado que a ra\'iz de esto tambi\'en se modifica, a excepci\'en del modo CFB en el cual el tama\~no del bloque de cifrado siempre se mantiene en 8 bits utilizando la funci\'on de cifrado cfb8().
+Idem ejercicio 4.1, a excepci\'on del cambio de tama\~no de la clave y vector de inicializaci\'on, los cuales se duplican. Por otro lado, el tama\~no del bloque de cifrado tambi\'en se modifica a ra\'iz de esto, a excepci\'on del modo CFB en el cual el tama\~no del bloque de cifrado siempre se mantiene en 8 bits utilizando la funci\'on de cifrado cfb8().
 
 \subsection{Ejercicio 4.3}
 La \'unica diferencia entre AES y DES es el tama\~no de la clave que se usa para encriptar y el tama\~no del bloque.\\
@@ -223,7 +223,7 @@ Esta es una de las propiedades del modo de operaci\'on CBC: un solo bit con erro
 el descifrado de los bloques $ c_{j} $ y $ c_{j +1} $. Aparte de esto el texto plano recuperado $ x_{j + 1} $ tiene
 errores en el mismo lugar que $ c_{j} $ tuvo. 
 \subsection{Ejercicio 4.6}
-Para el punto 4.6 se tomo el fragmento de la canci\'on \emph{El Matador} de los \emph{Fabulosos Cadillacs} 
+Para el punto 4.6 se toma el fragmento de la canci\'on \emph{El Matador} de los \emph{Fabulosos Cadillacs} 
 obtenido a partir de desencriptar uno de los archivos provistos por la c\'atedra.
 Dado que la cantidad de bloques que se corrompen al romper un bit de lo que est\'a encriptado y luego
 desencriptarlo, es $1 + \frac{n}{r}$, donde $n$ es el tamaño de la clave $K$ ($128$ bits en AES, 64 en DES) y $r$ es el tamaño de
@@ -255,7 +255,7 @@ Byte & Valor en el original [base 8] & Valor en el modificado [base 8]\\
 
 \subsection{Ejercicio 4.7}
 
-Para el punto 4.7 se considero el mismo archivo que para el ejercicio 4.6. La diferencia es que para el caso de usar
+Para el punto 4.7 se considera el mismo archivo que para el ejercicio 4.6. La diferencia es que para el caso de usar
 AES (AES128) la cantidad de bytes corruptos debe ser $ 1 + \frac{128}{8} = 17$. En el cuadro \ref{table47} se puede ver los bytes en los que difieren el archivo original y el desencriptado a partir
 del encriptado modificado.
 \begin{table}
@@ -300,7 +300,7 @@ se obtiene
 \begin{lstlisting}
  4673 121 120
 \end{lstlisting}
-Esto indica que en el byte 4673 hay una diferencia de un bit y que solo es esta la diferencia.
+Esto indica que en el byte 4673 hay una diferencia de un bit y que s\'olo es \'esta la diferencia.
 \begin{figure}
 	\begin{center}
 		\subfigure{\includegraphics[scale=0.6]{../results/48/fa-do.png}}
@@ -311,8 +311,7 @@ Esto indica que en el byte 4673 hay una diferencia de un bit y que solo es esta 
 	\label{fig:48}
 \end{figure}
 Esto se condice con la teor\'ia ya que una de las caracter\'isticas de OFB es que si
-hay uno o m\'as bits con errores en cualquier caracter $ c_{j} $ del texto cifrado
-esto solo afecta el descifrado de solo ese caracter. Y dado el texto plano se van a ver
+hay uno o m\'as bits con errores en cualquier caracter $ c_{j} $ del texto cifrado s\'olo afecta el descifrado de ese caracter. Y dado el texto plano se van a ver
 los bits complementados respecto al original sin error en las mismas posiciones donde 
 se cambiaron los bits del texto cifrado. En la figura \ref{fig:48} se muestra una 
 parte del archivo original \emph{fa-do.wav} y el archivo obtenido al desencriptar
@@ -321,15 +320,11 @@ el cifrado alterado donde se puede ver la diferencia.
 \subsection{Ejercicio 4.9}
 Finalmente, respecto al punto 4.9 se utiliza DES con el m\'etodo ECB para encriptar
 los archivos \emph{do-fa.wav} y \emph{si-mi.wav} con el objetivo de comparar la salida
-con el archivo \emph{incogDES.wav} y as\'i determinar que notas tiene el archivo
+con el archivo \emph{incogDES.wav} y as\'i determinar qu\'e notas tiene el archivo
 \emph{incogDES.wav}. Analizando los resultados con el Audacity se puede ver en la figura
-\ref{fig:DESAudacityCmp} como la onda correspondiente al archivo \emph{si-mi.wav} encriptado
-es igual a la correspondiente al archivo \emph{incogDES.wav} para la primera parte y luego 
-la onda correspondiente al archivo \emph{do-fa.wav} encriptado
-es igual a la correspondiente al archivo \emph{incogDES.wav} para la ultima parte . De esta forma,
-sin desencriptar
-el archivo \emph{incogDES.wav} se puede decir que \'este posee las notas \emph{si} y \emph{fa}.
-Desencriptando el archivo se verifica empíricamente esto supuesto.
+\ref{fig:DESAudacityCmp} c\'omo la onda correspondiente al archivo \emph{si-mi.wav} encriptado es igual a la correspondiente al archivo \emph{incogDES.wav} para la primera parte, y luego, la onda correspondiente al archivo \emph{do-fa.wav} encriptado es igual a la correspondiente al archivo \emph{incogDES.wav} para la \'ultima parte. De esta forma,
+sin desencriptar el archivo \emph{incogDES.wav} se puede decir que \'este posee las notas \emph{si} y \emph{fa}.
+Desencriptando el archivo se verifica empíricamente lo supuesto.\\
 \begin{figure}
 	\begin{center}
 		\subfigure{\includegraphics[scale=0.4]{../results/49/DES/audacityCmp1.png}}
@@ -342,10 +337,10 @@ Desencriptando el archivo se verifica empíricamente esto supuesto.
 
 Lo mismo se realiza para el caso donde se debe utilizar AES con el m\'etodo ECB para encriptar
 los archivos \emph{fa-do.wav} y \emph{mi-si.wav} con el objetivo de comparar la salida
-con el archivo \emph{incogAES.wav} y as\'i determinar que notas tiene el archivo
+con el archivo \emph{incogAES.wav} y as\'i determinar qu\'e notas tiene el archivo
 \emph{incogAES.wav}. Sin desencriptar el archivo \emph{incogAES.wav} se puede decir que \'este
-posee las notas \emph{fa} y \emph{si}. En la figura \ref{fig:AESAudacityCmp} se ve las ondas
-pertinentes con el Audacity. Desencriptando el archivo se verifica empíricamente esto supuesto.
+posee las notas \emph{fa} y \emph{si}. En la figura \ref{fig:AESAudacityCmp} se ven las ondas
+pertinentes con el Audacity. Desencriptando el archivo se verifica empíricamente lo supuesto.
 \begin{figure}
 	\begin{center}
 		\subfigure{\includegraphics[scale=0.4]{../results/49/AES/audacityCmp1.png}}
