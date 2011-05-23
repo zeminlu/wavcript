@@ -16,23 +16,16 @@
  * as the carrier's message size. The *carrier should be pointing to the
  * first sample to modify (not the header).
  */
-void *lsb1Hide(void *carrier, long carrierLen, int sampleLength,
-		void *msgToHide, long msgToHideLen, char *msgToHideExtension);
+void *lsbNHide(void *carrier, long carrierLen, int sampleLength,
+		void *msgToHide, long msgToHideLen, char *msgToHideExtension,
+		int n);
 
 /**
  * Will return the hidden message and will output in hiddenMessageSize
  * and hiddenMessageExtension the size and extension of the hidden message
  * found in message.
  */
-void *lsb1Extract(void *message, long messageLen, int sampleLength,
-		long *hiddenMessageSize, char *hiddenMessageExtension);
-
-
-void *lsb4Hide(void *carrier, long carrierLen, int sampleLength,
-		void *msgToHide, long msgToHideLen, char *msgToHideExtension);
-
-
-void *lsb4Extract(void *message, long messageLen, int sampleLength,
-		long *hiddenMessageSize, char *hiddenMessageExtension);
+void *lsbNExtract(void *message, long messageLen, int sampleLength,
+		long *hiddenMessageSize, char *hiddenMessageExtension, int n);
 
 #endif
