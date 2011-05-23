@@ -26,6 +26,6 @@ void *lsbNHide(void *carrier, long carrierLen, int sampleLength,
  * found in message.
  */
 void *lsbNExtract(void *message, long messageLen, int sampleLength,
-		long *hiddenMessageSize, char *hiddenMessageExtension, int n);
+		long *hiddenMessageSize, char **hiddenMessageExtension, int n);
 
 #endif
