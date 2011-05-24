@@ -8,6 +8,8 @@
 #ifndef TYPES_H_
 #define TYPES_H_
 
+#define LSBN 1
+
 /*
  * Aca todas las estructuras
  */
@@ -60,6 +62,17 @@ struct wavStr {
 };
 
 typedef enum {
+    EMB = 0,
+    EXT
+} t_steg_mode;
+
+typedef enum {
+    LSB1 = 0,
+    LSB4,
+    LSBE
+} t_steg_alg;
+
+typedef enum {
 	DEC = 0,
 	ENC
 } t_opt;
@@ -87,6 +100,9 @@ typedef struct {
 	char *iv;		        // Initialization vector
 	t_alg algorithm;		// Encryption or decryption algorithm used.
 	t_mode mode;			// Encryption or decryption mode used.
+    char *carrier;          // Carrier file's path
+    t_steg_mode stegMode;   // Steganography mode, embed or extract
+    t_steg_alg stegAlg;     //Steganography algorithm, LSB1, LSB4 or LSBE
 } t_input;
 
 #endif

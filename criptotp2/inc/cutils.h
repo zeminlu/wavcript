@@ -8,6 +8,10 @@
 #ifndef _CUTILS_
 #define _CUTILS_ 
 
+char * getFileExtension(char *filename);
+
+long readFile(const char *filename, void **data);
+
 /**
  * \fn void reverse(char s[])
  *
