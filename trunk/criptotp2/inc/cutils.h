@@ -10,6 +10,8 @@
 
 char * getFileExtension(char *filename);
 
+long writeFile(const char *filename, void *data, long filesize);
+
 long readFile(const char *filename, void **data);
 
 /**
