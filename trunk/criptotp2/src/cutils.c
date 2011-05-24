@@ -7,7 +7,61 @@
  
 #include <string.h>
 #include <ctype.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include "../inc/cutils.h"
+
+char * getFileExtension(char *filename){
+    char *extension = calloc(1, sizeof(char *) * 32);
+    char *peek = filename + filename [strlen (filename) - 1];
+    while (peek >= filename)
+    {
+        if (*peek == '.')
+        {
+            strcpy (extension, peek + 1);
+            break;
+        }
+        peek--;
+    }
+    return extension;
+}
+
+long writeFile(const char *filename, void *data, long filesize){
+    FILE *file;
+  
+    if ((file = fopen(filename, "wb")) != NULL){
+        fwrite(data, filesize, 1, file);
+        fclose(file);
+      
+        return(1);
+    } else {
+        printf("Error in opening the file!\n");
+    
+        return(0);
+    }
+}
+
+long readFile(const char *filename, void **data){
+    FILE *file;
+    int amm = 0;
+    
+    if ((file = fopen(filename, "rb")) != NULL){
+        *data = (char *) malloc(sizeof(char *));
+    
+        while (fread(((char *)data + amm), sizeof(char *), 1, file) != EOF){
+            amm += 1;
+            *data = (char*) realloc(data, sizeof(char *) * amm + 1);
+        }
+     
+        fclose(file);
+     
+        return(amm);
+    } else {
+        printf("Error in opening the file!\n"); 
+     
+        return(0);
+    }
+}
 
 void reverse(char s[]){
     int i, j;
