@@ -32,34 +32,31 @@ long writeFile(const char *filename, void *data, long filesize){
     if ((file = fopen(filename, "wb")) != NULL){
         fwrite(data, filesize, 1, file);
         fclose(file);
-      
-        return(1);
+        return 1;
     } else {
-        printf("Error in opening the file!\n");
-    
-        return(0);
+        fprintf(stderr, "Error in opening the file!\n");
+        return -1;
     }
 }
 
 long readFile(const char *filename, void **data){
     FILE *file;
-    int amm = 0;
+    int i = 0;
     
     if ((file = fopen(filename, "rb")) != NULL){
-        *data = (char *) malloc(sizeof(char *));
+        *data = (char *) malloc(1);
     
-        while (fread(((char *)data + amm), sizeof(char *), 1, file) != EOF){
-            amm += 1;
-            *data = (char*) realloc(data, sizeof(char *) * amm + 1);
+        while (fread(((char *) *data + i), 1, 1, file) != 0) {
+			++i;
+            *data = (char*) realloc(*data, i + 1);
         }
      
         fclose(file);
      
-        return(amm);
+        return i;
     } else {
-        printf("Error in opening the file!\n"); 
-     
-        return(0);
+        fprintf(stderr, "Error in opening the file!\n"); 
+        return -1;
     }
 }
 
