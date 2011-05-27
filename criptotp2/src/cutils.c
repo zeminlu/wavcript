@@ -22,7 +22,7 @@ char * getFileExtension(char *filename){
     char *peek = filename + (strlen(filename) - 1);
     while (peek >= filename){
         if (*peek == '.'){
-            strcpy (extension, peek + 1);
+            strcpy (extension, peek);
             break;
         }
         peek--;

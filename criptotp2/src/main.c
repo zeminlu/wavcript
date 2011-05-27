@@ -118,11 +118,10 @@ int main (int argc, char* argv[]) {
 	        data = lsbNExtract(sound, wf->chunkdatasize, wf->wBitsPerSample, &dataSize, &extension, LSBN);
 	    }
 	    
-        filenamelength = strlen(inputStruct->output) + strlen(extension) + 1;
+        filenamelength = strlen(inputStruct->output) + strlen(extension);
         char *filename = malloc(sizeof(char) * filenamelength);
         
         strcpy(filename, inputStruct->output);
-        strcat(filename, ".");
         strcat(filename, extension);
         
         writeFile(filename, data, dataSize);
