@@ -8,6 +8,8 @@
 #ifndef _CUTILS_
 #define _CUTILS_ 
 
+void endian_swap(unsigned int * x);
+
 char * getFileExtension(char *filename);
 
 long writeFile(const char *filename, void *data, long filesize);

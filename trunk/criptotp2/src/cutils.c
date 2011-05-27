@@ -11,11 +11,16 @@
 #include <stdio.h>
 #include "../inc/cutils.h"
 
+void endian_swap(unsigned int * x){
+    *x = (*x>>24) | ((*x<<8) & 0x00FF0000) | ((*x>>8) & 0x0000FF00) | (*x<<24);
+    
+    return;
+}
+
 char * getFileExtension(char *filename){
     char *extension = calloc(1, sizeof(char *) * 32);
-    char *peek = filename + filename [strlen (filename) - 1];
-    while (peek >= filename)
-    {
+    char *peek = filename + filename [strlen(filename) - 1];
+    while (peek >= filename){
         if (*peek == '.')
         {
             strcpy (extension, peek + 1);

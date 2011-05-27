@@ -30,7 +30,7 @@ LD = gcc
 LDFLAGS = $(LIBRARIES) -m32 -lcrypto -g -o
 #
 TARGET1 = criptoWavs
-OBJECTS1 = main.o parser.o wav.o definitions.o crypto.o cutils.o
+OBJECTS1 = main.o parser.o stegAlgorithms.o wav.o definitions.o crypto.o cutils.o
 
 ###############################################################################
 .SILENT:
@@ -51,6 +51,8 @@ $(TARGET1): $(OBJECTS1)
 main.o: main.c main.h
 
 parser.o: parser.c parser.h
+
+stegAlgorithms.o: stegAlgorithms.c stegAlgorithms.h
 
 wav.o: wav.c wav.h
     

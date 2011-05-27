@@ -18,8 +18,8 @@ long cryptWithPass(void *inData, long data_len, void *outData, t_opt crypt_mode,
     evpCipherFunc type = evpCipherFuncs[mode][algorithm];
     int keySize = (algorithm == AES256) ? 32 : (algorithm == AES192 ? 24 : (algorithm == AES128 ? 16 : 8));
     int derivedKeySize, cryptSize;
-    unsigned char *key = malloc(keySize);
-    unsigned char *iv = malloc(keySize);    
+    unsigned char *key = malloc(sizeof(char) * keySize);
+    unsigned char *iv = malloc(sizeof(char) * keySize);    
         
     if ((derivedKeySize =  EVP_BytesToKey(type(), EVP_md5(), NULL, (unsigned char *)pass, strlen(pass), 1, key, iv)) != keySize){
         printf("keySize & derivedKeySize differ, keySize = %d, derivedKeySize = %d\n", keySize, derivedKeySize);
@@ -54,7 +54,7 @@ int cryptMe(void *inData, long data_len, void *outData, evpCipherFunc type, t_op
         return -1;
     }
     
-    EVP_CIPHER_CTX_set_padding(&ctx, 0);
+    //EVP_CIPHER_CTX_set_padding(&ctx, 0);  //Dejo el padding activado para TP2
     
     if (EVP_CipherUpdate(&ctx, outData, &outl, inData, data_len) == 0){
         printf("Error en cipherUpdate\n");
