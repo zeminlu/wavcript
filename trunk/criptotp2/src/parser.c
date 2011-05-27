@@ -170,7 +170,7 @@ boolean wrongInput(t_input *input) {
 	if(input->stegMode == INVALID_OPT) {
 		return TRUE;
 	}
-	if(input->input == NULL) {
+	if(input->stegMode == EMB && input->input == NULL) {
 		return TRUE;
 	}
 	if(input->carrier == NULL) {
