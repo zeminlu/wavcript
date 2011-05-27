@@ -28,4 +28,6 @@ t_mode parseMode(char *mode);
 
 t_alg parseAlgorithm(char *algorithm);
 
+t_steg_alg parseStegAlg(char *mode);
+
 #endif
