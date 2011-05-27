@@ -91,8 +91,8 @@ t_input * parseInput(int argc, char *argv[]) {
 			}
 		} else if(strcmp(currentOpt, "-p") == 0) {
 			if(i + 1 < argc) {
-				if(input->output == NULL) {
-					input->output = argv[i+1];
+				if(input->carrier == NULL) {
+					input->carrier = argv[i+1];
 				} else {
 					// TODO: Manage error, duplicated opcode.
 				}
