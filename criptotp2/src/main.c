@@ -8,7 +8,6 @@
 #include "../inc/main.h"
 
 int main (int argc, char* argv[]) {
-    long res;
 	t_input *inputStruct = parseInput(argc, argv);
 
 	//Preconditions check.
@@ -43,11 +42,11 @@ int main (int argc, char* argv[]) {
 //		return 0;
 	}
 	
-    void *sound, *cryptSound;
+    void *sound;
+    
     WaveFile *wf = malloc(sizeof(WaveFile));
-    //WaveFile_Read("../la-fa.wav", wf, &sound);
-	//Levantamos el wav.
     WaveFile_Read(inputStruct->carrier, wf, &sound);
+    
     printf("riff: %c%c%c%c\nfilesize: %d\nrifftype: %c%c%c%c\nchunk_format_id: %c%c%c%c\nchunkformatsize: %d\n", 
         wf->riff[0], wf->riff[1], wf->riff[2], wf->riff[3], wf->filesize, wf->rifftype[0], wf->rifftype[1], 
         wf->rifftype[2], wf->rifftype[3], wf->chunk_format_id[0], wf->chunk_format_id[1], wf->chunk_format_id[2], 
@@ -58,89 +57,80 @@ int main (int argc, char* argv[]) {
         wf->wBitsPerSample, wf->chunk_data_id[0], wf->chunk_data_id[1], 
         wf->chunk_data_id[2], wf->chunk_data_id[3], wf->chunkdatasize);
     
-    cryptSound = malloc(wf->chunkdatasize);
-    
-    //res = cryptWithPass(sound, wf->chunkdatasize, cryptSound, wf->operation, wf->algorithm, wf->mode, char *pass);
-    //res = cryptWithPass(sound, wf->chunkdatasize, cryptSound, 1, 1, 0, "12345678");
-       
-	if (inputStruct->pass == NULL) {
-    	//no password, steg without encription
-    	
-    	//embed: get data size, get carrier size, get null terminated extension, call steg algorithm, save file
-    	//extract: unsteg wav file, save data file
-    	
-        void *data;
-        long dataSize, carrierSize = wf->chinkdatasize;
+    void *data, *decryptData, *toCryptData, *cryptData, *stegData, *hiddenData;    
+    unsigned int dataSize, hiddenDataSize, cryptSize;
+    char *extension;
+         	
+	//Without crypt:
+	//embed: get data size, get carrier size, get null terminated extension, call steg algorithm, save file
+	//extract: unsteg wav file, save data file
+	
+	//With crypt:
+	//embed: get data size, get carrier size, get null terminated extension, encrypt (data size + data + extension), get encrypt size, steg, save file
+	//extract: unsteg wav file, decrypt (data size + data + extension), save file     
+	
+	if (inputStruct->stegMode == EMB){
+        if ((dataSize = readFile(inputStruct->input, &data)) <= 0){
+            return -1;
+        }
         
-    	if (inputStruct->stegMode == EMB){
-            if ((dataSize = readFile(inputStruct->input, &data)) <= 0){
-                return -1;
-            }
+        extension = getFileExtension(inputStruct->input);
+        
+        if (inputStruct->pass != NULL){
+            int toCryptSize = 4 + dataSize + strlen(extension);
+            toCryptData = malloc (sizeof(char) * toCryptSize);      
+            endian_swap(&dataSize); //ENDIANNN
             
-            char *extension = getFileExtension(inputStruct->input);
-            void *stegData = lsbNHide(sound, carrierSize, wf->wBitsPerSample, data, dataSize, extension, LSBN);
-            WaveFile_Write(inputStruct->output, wf, stegData);
+            memcpy(toCryptData, (void *) &dataSize, sizeof(char *) * 4);
+            memcpy((char *)toCryptData + 4, data, dataSize);
+            memcpy((char *)toCryptData + (4 + dataSize), extension, strlen(extension));    
+    	    
+    	    cryptData = malloc(sizeof(char) * (toCryptSize + 4)); //el 4 es el pulmoncito para el padding    	    
+    	    cryptSize = (unsigned int) cryptWithPass(toCryptData, toCryptSize, cryptData, inputStruct->operation, inputStruct->algorithm, inputStruct->mode, inputStruct->pass);
+            stegData = lsbNHideCrypted(sound, wf->chunkdatasize, wf->wBitsPerSample, cryptData, cryptSize, LSBN);
+                        
+            varFree(2, toCryptData, cryptData);      
+        } else {
+            stegData = lsbNHide(sound, wf->chunkdatasize, wf->wBitsPerSample, data, dataSize, extension, LSBN);
+        }
+        
+        WaveFile_Write(inputStruct->output, wf, stegData);
+        
+        varFree(3, data, extension, stegData);
+        
+	} else {    	    
+	    if (inputStruct->pass != NULL){
+	        hiddenData = lsbNExtractCrypted(sound, wf->chunkdatasize, wf->wBitsPerSample, &hiddenDataSize, LSBN);
+    	
+	        decryptData = malloc(sizeof(char) * hiddenDataSize);
+            cryptSize = (int) cryptWithPass(hiddenData, hiddenDataSize, decryptData, inputStruct->operation, inputStruct->algorithm, inputStruct->mode, inputStruct->pass);
+            memcpy(&dataSize, decryptData, sizeof(char) * 4);
+            endian_swap(&dataSize); //ENDIANNNNN
+            
+            data = malloc(sizeof(char) * dataSize);
+            memcpy(data, (char *)decryptData + 4, dataSize);
 
-            varFree(2, data, extension);
-    	} else {
-            long dataSize;
-            char *extension;
-    	    void *data = lsbNExtract(sound, carrierSize, wf->wBitsPerSample, &dataSize, &extension, LSBN);
-            int filenamelength = strlen(inputStruct->output) + strlen(extension);
-            char filename[filenamelength + 1] = {0};
-            strcopy(filename, inputStruct->output);
-            strcopy(filename, ".");
-            strcat(filename, extension);
-            writeFile(filename, data, dataSize);
-    	    
-            varFree(2, data, extension);
-    	}    	
-	} else {
-	    //password provided, steg with encription
+            extension = malloc(sizeof(char) * (cryptSize - 4 - dataSize));
+        	memcpy(extension, (char *)decryptData + (4 + dataSize), cryptSize - 4 - dataSize);
+            
+            varFree(2, decryptData, hiddenData);
+	    } else {
+	        data = lsbNExtract(sound, wf->chunkdatasize, wf->wBitsPerSample, &dataSize, &extension, LSBN);
+	    }
 	    
-	    //embed: get data size, get carrier size, get null terminated extension, encrypt (data size + data + extension), get encrypt size, steg, save file
-	    //extract: unsteg wav file, decrypt (data size + data + extension), save file
+        int filenamelength = strlen(inputStruct->output) + strlen(extension) + 1;
+        char *filename = malloc(sizeof(char) * filenamelength);
+        
+        strcpy(filename, inputStruct->output);
+        strcat(filename, ".");
+        strcat(filename, extension);
+        
+        writeFile(filename, data, dataSize);
 	    
-	    if (inputStruct->stegMode == EMB){
-    	    res = cryptWithPass(sound, wf->chunkdatasize, cryptSound, inputStruct->operation, inputStruct->algorithm, inputStruct->mode, inputStruct->pass);
-        	
-    	} else {
-    	    long dataSize;    	    
-            long decDataSize;
-    	    
-    	    void *data = lsbNExtractCrypted(sound, carrierSize, wf->wBitsPerSample, &dataSize, LSBN);
-            void *decryptData = malloc(sizeof(char *) * dataSize);
-            res = cryptWithPass(data, wf->chunkdatasize, decryptData, inputStruct->operation, inputStruct->algorithm, inputStruct->mode, inputStruct->pass);
-        	
-            char charSize[4];
-            
-            size[0] = decryptData[0];
-            size[1] = decryptData[1];
-            size[2] = decryptData[2];
-            size[3] = decryptData[3];
-
-            decDataSize = (long) charSize;
-            
-            void *hiddenData = malloc(sizeof(char *) * decDatasize);
-            memcpy(hiddenData, (char *)decryptData + 4, decDataSize);
-            
-            int extSize = res - 4 - decDataSize;
-        	char *extension = (char *)decryptData + (4 + decDataSize);
-        	
-            int filenamelength = strlen(inputStruct->output) + strlen(extension);
-            char filename[filenamelength + 1] = {0};
-            strcopy(filename, inputStruct->output);
-            strcopy(filename, ".");
-            strcat(filename, extension);
-            writeFile(filename, data, dataSize);
-    	    
-            varFree(3, data, decryptData, hiddenData);
-    	}
-	}
-    //WaveFile_Write("../la-fa-post.wav", wf, cryptSound);
-    WaveFile_Write(inputStruct->output, wf, cryptSound);
+        varFree(3, data, extension, filename);
+	}    	
     
-    varFree(2, sound, cryptSound);
+    varFree(2, wf, sound);
 	
 	return 0;
 }

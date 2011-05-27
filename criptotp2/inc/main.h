@@ -18,5 +18,7 @@
 #include "definitions.h"
 #include "wav.h"
 #include "crypto.h"
+#include "cutils.h"
+#include "stegAlgorithms.h"
 
 #endif

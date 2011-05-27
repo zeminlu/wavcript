@@ -21,7 +21,7 @@ short WaveFile_Read(const char *filename, WaveFile *wf, void **data){
     
     if ((wfile = fopen(filename, "rb")) != NULL){
         fread(wf, sizeof(WaveFile), 1, wfile);
-        *data = (char*) malloc(wf->chunkdatasize);
+        *data = (char *) malloc(wf->chunkdatasize);
         fread(*data, wf->chunkdatasize, 1, wfile);
         fclose(wfile);
         
