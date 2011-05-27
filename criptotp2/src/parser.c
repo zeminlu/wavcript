@@ -186,10 +186,10 @@ boolean wrongInput(t_input *input) {
 		input->mode = CBC;
 	}
 	if(input->pass != NULL && input->algorithm == INVALID_OPT && input->mode != INVALID_OPT) {
-		input->mode = AES128;
+		input->algorithm = AES128;
 	}
 	if(input->pass != NULL && input->algorithm == INVALID_OPT && input->mode == INVALID_OPT) {
-		input->mode = AES128;
+		input->algorithm = AES128;
 		input->mode = CBC;
 	}
 	return FALSE;

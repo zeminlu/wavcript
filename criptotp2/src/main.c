@@ -58,7 +58,7 @@ int main (int argc, char* argv[]) {
         wf->chunk_data_id[2], wf->chunk_data_id[3], wf->chunkdatasize);
     
     void *data, *decryptData, *toCryptData, *cryptData, *stegData, *hiddenData;    
-    unsigned int dataSize, hiddenDataSize, cryptSize;
+    unsigned int dataSize, hiddenDataSize, cryptSize, toCryptSize, filenamelength;
     char *extension;
          	
 	//Without crypt:
@@ -75,17 +75,18 @@ int main (int argc, char* argv[]) {
         }
         
         extension = getFileExtension(inputStruct->input);
-        
         if (inputStruct->pass != NULL){
-            int toCryptSize = 4 + dataSize + strlen(extension);
+            toCryptSize = 4 + dataSize + strlen(extension);
             toCryptData = malloc (sizeof(char) * toCryptSize);      
-            endian_swap(&dataSize); //ENDIANNN
             
-            memcpy(toCryptData, (void *) &dataSize, sizeof(char *) * 4);
+            endian_swap(&dataSize); //ENDIANNN
+            memcpy(toCryptData, (void *) &dataSize, sizeof(char) * 4);
+            endian_swap(&dataSize); //NO ENDIANNN
+            
             memcpy((char *)toCryptData + 4, data, dataSize);
             memcpy((char *)toCryptData + (4 + dataSize), extension, strlen(extension));    
     	    
-    	    cryptData = malloc(sizeof(char) * (toCryptSize + 4)); //el 4 es el pulmoncito para el padding    	    
+    	    cryptData = malloc(sizeof(char) * (toCryptSize + 32)); //el 32 es el pulmoncito para el padding    	    
     	    cryptSize = (unsigned int) cryptWithPass(toCryptData, toCryptSize, cryptData, inputStruct->operation, inputStruct->algorithm, inputStruct->mode, inputStruct->pass);
             stegData = lsbNHideCrypted(sound, wf->chunkdatasize, wf->wBitsPerSample, cryptData, cryptSize, LSBN);
                         
@@ -97,13 +98,12 @@ int main (int argc, char* argv[]) {
         WaveFile_Write(inputStruct->output, wf, stegData);
         
         varFree(3, data, extension, stegData);
-        
 	} else {    	    
 	    if (inputStruct->pass != NULL){
 	        hiddenData = lsbNExtractCrypted(sound, wf->chunkdatasize, wf->wBitsPerSample, &hiddenDataSize, LSBN);
     	
 	        decryptData = malloc(sizeof(char) * hiddenDataSize);
-            cryptSize = (int) cryptWithPass(hiddenData, hiddenDataSize, decryptData, inputStruct->operation, inputStruct->algorithm, inputStruct->mode, inputStruct->pass);
+            cryptSize = (unsigned int) cryptWithPass(hiddenData, hiddenDataSize, decryptData, inputStruct->operation, inputStruct->algorithm, inputStruct->mode, inputStruct->pass);
             memcpy(&dataSize, decryptData, sizeof(char) * 4);
             endian_swap(&dataSize); //ENDIANNNNN
             
@@ -118,7 +118,7 @@ int main (int argc, char* argv[]) {
 	        data = lsbNExtract(sound, wf->chunkdatasize, wf->wBitsPerSample, &dataSize, &extension, LSBN);
 	    }
 	    
-        int filenamelength = strlen(inputStruct->output) + strlen(extension) + 1;
+        filenamelength = strlen(inputStruct->output) + strlen(extension) + 1;
         char *filename = malloc(sizeof(char) * filenamelength);
         
         strcpy(filename, inputStruct->output);

@@ -22,10 +22,10 @@ typedef struct evp_cipher_ctx_st EVP_CIPHER_CTX;
 
 typedef const EVP_CIPHER * (*evpCipherFunc) ();
 
-long cryptWithPass(void *inData, long data_len, void *outData, t_opt crypt_mode, t_alg algorithm, t_mode mode, char *pass);
+unsigned int cryptWithPass(void *inData, long data_len, void *outData, t_opt crypt_mode, t_alg algorithm, t_mode mode, char *pass);
 
-long cryptWithKey(void *inData, long data_len, void *outData, t_opt crypt_mode, t_alg algorithm, t_mode mode, char *key, char *iv);
+unsigned int cryptWithKey(void *inData, long data_len, void *outData, t_opt crypt_mode, t_alg algorithm, t_mode mode, char *key, char *iv);
 
-int cryptMe(void *inData, long data_len, void *outData, evpCipherFunc type, t_opt crypt_mode, unsigned char *key, unsigned char *iv);
+unsigned int cryptMe(void *inData, long data_len, void *outData, evpCipherFunc type, t_opt crypt_mode, unsigned char *key, unsigned char *iv);
 
 #endif

@@ -18,16 +18,16 @@ void endian_swap(unsigned int * x){
 }
 
 char * getFileExtension(char *filename){
-    char *extension = calloc(1, sizeof(char *) * 32);
-    char *peek = filename + filename [strlen(filename) - 1];
+    char *extension = calloc(1, sizeof(char) * 32);
+    char *peek = filename + (strlen(filename) - 1);
     while (peek >= filename){
-        if (*peek == '.')
-        {
+        if (*peek == '.'){
             strcpy (extension, peek + 1);
             break;
         }
         peek--;
     }
+    
     return extension;
 }
 

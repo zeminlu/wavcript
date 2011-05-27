@@ -14,10 +14,10 @@ evpCipherFunc evpCipherFuncs[4][4] = {
     {EVP_aes_128_cbc, EVP_aes_192_cbc, EVP_aes_256_cbc, EVP_des_cbc}
 };
 
-long cryptWithPass(void *inData, long data_len, void *outData, t_opt crypt_mode, t_alg algorithm, t_mode mode, char *pass){
+unsigned int cryptWithPass(void *inData, long data_len, void *outData, t_opt crypt_mode, t_alg algorithm, t_mode mode, char *pass){
     evpCipherFunc type = evpCipherFuncs[mode][algorithm];
-    int keySize = (algorithm == AES256) ? 32 : (algorithm == AES192 ? 24 : (algorithm == AES128 ? 16 : 8));
-    int derivedKeySize, cryptSize;
+    int derivedKeySize, keySize = (algorithm == AES256) ? 32 : (algorithm == AES192 ? 24 : (algorithm == AES128 ? 16 : 8));
+    unsigned int cryptSize;
     unsigned char *key = malloc(sizeof(char) * keySize);
     unsigned char *iv = malloc(sizeof(char) * keySize);    
         
@@ -33,8 +33,8 @@ long cryptWithPass(void *inData, long data_len, void *outData, t_opt crypt_mode,
     return cryptSize;
 }
 
-long cryptWithKey(void *inData, long data_len, void *outData, t_opt crypt_mode, t_alg algorithm, t_mode mode, char *key, char *iv){
-    int cryptSize;
+unsigned int cryptWithKey(void *inData, long data_len, void *outData, t_opt crypt_mode, t_alg algorithm, t_mode mode, char *key, char *iv){
+    unsigned int cryptSize;
     evpCipherFunc type = evpCipherFuncs[mode][algorithm];
     
     cryptSize = cryptMe(inData, data_len, outData, type, crypt_mode, (unsigned char *)key, (mode == ECB) ? NULL :  (unsigned char *)iv);
@@ -42,8 +42,8 @@ long cryptWithKey(void *inData, long data_len, void *outData, t_opt crypt_mode, 
     return cryptSize;
 }
 
-int cryptMe(void *inData, long data_len, void *outData, evpCipherFunc type, t_opt crypt_mode, unsigned char *key, unsigned char *iv){
-    int outl, templ;
+unsigned int cryptMe(void *inData, long data_len, void *outData, evpCipherFunc type, t_opt crypt_mode, unsigned char *key, unsigned char *iv){
+    unsigned int outl, templ;
     
     EVP_CIPHER_CTX ctx;
     
@@ -56,12 +56,12 @@ int cryptMe(void *inData, long data_len, void *outData, evpCipherFunc type, t_op
     
     //EVP_CIPHER_CTX_set_padding(&ctx, 0);  //Dejo el padding activado para TP2
     
-    if (EVP_CipherUpdate(&ctx, outData, &outl, inData, data_len) == 0){
+    if (EVP_CipherUpdate(&ctx, outData, (int *) &outl, inData, data_len) == 0){
         printf("Error en cipherUpdate\n");
         return -1;
     }
     
-    if (EVP_CipherFinal_ex(&ctx, ((unsigned char *) outData) + outl, &templ) == 0){
+    if (EVP_CipherFinal_ex(&ctx, ((unsigned char *) outData) + outl, (int *) &templ) == 0){
         printf("Error en cipherFinal\n");
         return -1;
     }
@@ -71,10 +71,5 @@ int cryptMe(void *inData, long data_len, void *outData, evpCipherFunc type, t_op
         return -1;
     }
         
-    if (outl + templ != data_len){
-        printf("El tamaño de los datos encriptados es distinto al de los datos desencriptados, outl = %d, templ = %d\n", outl, templ);
-        return -1;
-    }
-    
     return outl + templ;
 }
