@@ -22,6 +22,14 @@ cmp -l pruebaE1.wav results/ejemploBE/funT1E.wav
 echo ">"
 rm pruebaE1.wav
 ####
+echo "Hiding michelin.jpg with carrier fun.wav: LSBE, BigEndian" 
+./bin/criptoSteg -embed -in "results/ejemploBE/michelin.jpg" -p "results/ejemploBE/fun.wav" -out "pruebaE.wav" -steg LSBE -e "big"  > /dev/null
+echo "Compare result <"
+cmp -l pruebaE.wav results/ejemploBE/funTE.wav
+echo ">"
+rm pruebaE.wav
+
+####
 echo "Unhiding the message in funT1.wav: LSB1, BigEndian" 
 ./bin/criptoSteg -extract -p "results/ejemploBE/funT1.wav" -out "pruebaExt1" -steg LSB1 -e "big" > /dev/null
 echo "Compare result <"
@@ -42,6 +50,15 @@ echo "Compare result <"
 cmp -l pruebaExt1E.jpg results/ejemploBE/michelin.jpg
 echo ">"
 rm pruebaExt1E.jpg
+####
+echo "Unhiding the message in funTE.wav: LSBE, BigEndian" 
+./bin/criptoSteg -extract -p "results/ejemploBE/funTE.wav" -out "pruebaExtE" -steg LSBE -e "big" > /dev/null
+echo "Compare result <"
+cmp -l pruebaExtE.jpg results/ejemploBE/michelin.jpg
+echo ">"
+rm pruebaExtE.jpg
+
+
 #######################################
 #######################################
 echo "Running tests for Little Endian wavs..."
@@ -63,9 +80,17 @@ rm prueba4.wav
 echo "Hiding michelin.jpg with carrier fun.wav: LSB1, LittleEndian, encrypted aes192 pass \"oculto\""
 ./bin/criptoSteg -embed -in "results/ejemploLE/michelin.jpg" -p "results/ejemploLE/fun.wav" -out "pruebaE1.wav" -steg LSB1 -a aes192 -m cbc -pass "oculto" > /dev/null
 echo "Compare result <"
-cmp -l pruebaE1.wav results/ejemploBE/funT1ELE.wav
+cmp -l pruebaE1.wav results/ejemploLE/funT1ELE.wav
 echo ">"
 rm pruebaE1.wav
+####
+echo "Hiding michelin.jpg with carrier fun.wav: LSBE, LittleEndian" 
+./bin/criptoSteg -embed -in "results/ejemploLE/michelin.jpg" -p "results/ejemploLE/fun.wav" -out "pruebaE.wav" -steg LSBE  > /dev/null
+echo "Compare result <"
+cmp -l pruebaE.wav results/ejemploLE/funTELE.wav
+echo ">"
+rm pruebaE.wav
+
 ####
 echo "Unhiding the message in funT1.wav: LSB1, LittleEndian" 
 ./bin/criptoSteg -extract -p "results/ejemploLE/funT1LE.wav" -out "pruebaExt1" -steg LSB1 > /dev/null
@@ -87,4 +112,11 @@ echo "Compare result <"
 cmp -l pruebaExt1E.jpg results/ejemploLE/michelin.jpg
 echo ">"
 rm pruebaExt1E.jpg
+####
+echo "Unhiding the message in funTELE.wav: LSBE, LittleEndian" 
+./bin/criptoSteg -extract -p "results/ejemploLE/funTELE.wav" -out "pruebaExtE" -steg LSBE > /dev/null
+echo "Compare result <"
+cmp -l pruebaExtE.jpg results/ejemploLE/michelin.jpg
+echo ">"
+rm pruebaExtE.jpg
 
