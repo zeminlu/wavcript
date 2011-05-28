@@ -99,6 +99,16 @@ t_input * parseInput(int argc, char *argv[]) {
 			} else {
 				// TODO: Manage error, incorrect input.
 			}
+	    } else if(strcmp(currentOpt, "-e") == 0) {
+			if(i + 1 < argc) {
+				if(input->endianMode == INVALID_OPT) {
+					input->endianMode = parseEndianMode(argv[i+1]);
+				} else {
+					// TODO: Manage error, duplicated opcode.
+				}
+			} else {
+				// TODO: Manage error, incorrect input.
+			}
 		} else {
 			// TODO: Manage error, inexistant option.
 		}
@@ -152,6 +162,19 @@ t_steg_alg parseStegAlg(char *mode) {
 	return INVALID_OPT;
 }
 
+t_steg_alg parseEndianMode(char *mode) {
+	char *modes[] = {"big", "little"};
+	int elems = sizeof(modes) / sizeof(char*);
+	int i = 0;
+	for(i = 0; i < elems; i++) {
+        sToLower(&mode);
+		if(strcmp(mode, modes[i]) == 0) {
+			return i;
+		}
+	}
+	return INVALID_OPT;
+}
+
 void initInWrongValues(t_input *input) {
 	input->input = NULL;
 	input->output = NULL;
@@ -164,6 +187,7 @@ void initInWrongValues(t_input *input) {
 	input->carrier = NULL;
 	input->stegMode = INVALID_OPT;
 	input->stegAlg = INVALID_OPT;
+    input->endianMode = INVALID_OPT;
 }
 
 boolean wrongInput(t_input *input) {
@@ -192,5 +216,9 @@ boolean wrongInput(t_input *input) {
 		input->algorithm = AES128;
 		input->mode = CBC;
 	}
+	if(input->endianMode == INVALID_OPT) {
+		input->endianMode = LIT;
+	}
+	
 	return FALSE;
 }

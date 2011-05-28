@@ -88,11 +88,11 @@ int main (int argc, char* argv[]) {
     	    
     	    cryptData = malloc(sizeof(char) * (toCryptSize + 32)); //el 32 es el pulmoncito para el padding    	    
     	    cryptSize = (unsigned int) cryptWithPass(toCryptData, toCryptSize, cryptData, inputStruct->operation, inputStruct->algorithm, inputStruct->mode, inputStruct->pass);
-            stegData = lsbNHideCrypted(sound, wf->chunkdatasize, wf->wBitsPerSample, cryptData, cryptSize, inputStruct->stegAlg);
+            stegData = lsbNHideCrypted(sound, wf->chunkdatasize, wf->wBitsPerSample, cryptData, cryptSize, inputStruct->stegAlg, inputStruct->endianMode);
                         
             varFree(2, toCryptData, cryptData);      
         } else {
-            stegData = lsbNHide(sound, wf->chunkdatasize, wf->wBitsPerSample, data, dataSize, extension, inputStruct->stegAlg);
+            stegData = lsbNHide(sound, wf->chunkdatasize, wf->wBitsPerSample, data, dataSize, extension, inputStruct->stegAlg, inputStruct->endianMode);
         }
         
         WaveFile_Write(inputStruct->output, wf, stegData);
@@ -100,7 +100,7 @@ int main (int argc, char* argv[]) {
         varFree(3, data, extension, stegData);
 	} else {    	    
 	    if (inputStruct->pass != NULL){
-	        hiddenData = lsbNExtractCrypted(sound, wf->chunkdatasize, wf->wBitsPerSample, &hiddenDataSize, inputStruct->stegAlg);
+	        hiddenData = lsbNExtractCrypted(sound, wf->chunkdatasize, wf->wBitsPerSample, &hiddenDataSize, inputStruct->stegAlg, inputStruct->endianMode);
     	
 	        decryptData = malloc(sizeof(char) * hiddenDataSize);
             cryptSize = (unsigned int) cryptWithPass(hiddenData, hiddenDataSize, decryptData, inputStruct->operation, inputStruct->algorithm, inputStruct->mode, inputStruct->pass);
@@ -115,7 +115,7 @@ int main (int argc, char* argv[]) {
             
             varFree(2, decryptData, hiddenData);
 	    } else {
-	        data = lsbNExtract(sound, wf->chunkdatasize, wf->wBitsPerSample, &dataSize, &extension, inputStruct->stegAlg);
+	        data = lsbNExtract(sound, wf->chunkdatasize, wf->wBitsPerSample, &dataSize, &extension, inputStruct->stegAlg, inputStruct->endianMode);
 	    }
 	    
         filenamelength = strlen(inputStruct->output) + strlen(extension) + 1;

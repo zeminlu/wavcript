@@ -95,6 +95,11 @@ typedef enum {
 	CBC
 } t_mode;
 
+typedef enum {
+	LIT = 0,
+	BIG
+} t_endian;
+
 typedef struct {
 	char *input;			// Input file's path
 	char *output;			// Output file's path
@@ -107,6 +112,7 @@ typedef struct {
     char *carrier;          // Carrier file's path
     t_steg_mode stegMode;   // Steganography mode, embed or extract
     t_steg_alg stegAlg;     //Steganography algorithm, LSB1, LSB4 or LSBE
+    t_endian endianMode;    //Little or Big endian steg mode
 } t_input;
 
 #endif
