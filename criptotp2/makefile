@@ -69,7 +69,7 @@ cleanObjects:
 
 clean:
 	@echo "Clearing" $(OUTPUT_DIR) "directory..."
-	@rm -f $(OUTPUT_DIR)*.bin
+	@rm -f $(OUTPUT_DIR)/*
 	@echo "Clearing Objects..."
 	@rm -f *.o
 	@echo "Done."
