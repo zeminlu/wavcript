@@ -123,13 +123,15 @@ int main (int argc, char* argv[]) {
         
         strcpy(filename, inputStruct->output);
         strcat(filename, extension);
+		printf("%s", extension);
         
         writeFile(filename, data, (long) dataSize);
-	    
         varFree(3, data, extension, filename);
+	   	printf("freed!"); 
 	}    	
     
     varFree(2, wf, sound);
+	   	printf("freed!"); 
 	
 	return 0;
 }

@@ -57,4 +57,8 @@ void itoa(int n, char s[]);
 
 void sToLower(char **string);
 
+void printBits(unsigned char bits);
+
+void print(char *string, unsigned int len);
+
 #endif

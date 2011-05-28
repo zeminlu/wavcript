@@ -98,3 +98,23 @@ void sToLower(char **string){
     }
     return;
 }
+
+void printBits(unsigned char bits) {
+	unsigned char mask = 0x80;
+	int i;
+	for (i = 0; i < 8; ++i) {
+		if (mask & bits) {
+			printf("1");
+		} else {
+			printf("0");
+		}
+		mask = mask >> 1;
+	}
+}
+
+void print(char *string, unsigned int len) {
+	unsigned int i = 0;
+	for (; i < len; ++i) {
+		printf("%c", *(string + i));
+	}
+}
