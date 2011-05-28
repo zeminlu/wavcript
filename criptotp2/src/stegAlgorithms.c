@@ -21,6 +21,8 @@
  * Private methods definitions
  * ===========================
  */
+unsigned char getTargetByte(void *ret, unsigned int i, int sampleLength);
+
 void *lsbNUnhide(void *message, long messageLen, int sampleLength,
 		unsigned int *hiddenMessageSize, char **hiddenMessageExtension, int n,
 		int expectsExtension, int bigEndianWav);
@@ -84,10 +86,24 @@ void *lsbNExtractCrypted(void *message, long messageLen, int sampleLen,
  * Private Methods
  * ===============
  */
+
+/**
+ * Returns the corresponding target byte depending on the wav
+ * endianism.
+ */
+unsigned char *getTargetBytePointer(void *ret, int i, int sampleLength,
+		int bigEndianWav) {
+	if (bigEndianWav) {
+		return ((unsigned char *) ret + i + (sampleLength / 8) - 1);
+	} else {
+		return ((unsigned char *) ret + i);
+	}	
+}
+
 void *hideMessage(void *carrier, long carrierLen, int sampleLength,
 		void *msgToHide, int msgToHideLen, int n, int bigEndianWav) {
 	if (carrierLen <= 0 || sampleLength <= 0 || (sampleLength % 8) != 0
-			|| msgToHideLen <= 0 || n > 8) {
+			|| msgToHideLen <= 0 || n > 8 || n < 0) {
 		fprintf(stderr, "Illegal parameters.");
 		return NULL;
 	}
@@ -110,7 +126,9 @@ void *hideMessage(void *carrier, long carrierLen, int sampleLength,
 		// En carryingByte quedo lo que habia antes con n ceros al final
 		// para pisar.
 		unsigned char carryingByte =
-			*((char *) ret + i + (sampleLength / 8) - 1) & carrierMask;
+			//*((char *) ret + i + (sampleLength / 8) - 1)
+			*getTargetBytePointer(ret, i, sampleLength, bigEndianWav)
+			& carrierMask;
 		unsigned char nZerosInTheBack = 0xFF << (8 - n);
 		// LeavingMask se usa para obtener del mensaje a ocultar los bits
 		// correspondientes para esta iteracion.
@@ -131,7 +149,8 @@ void *hideMessage(void *carrier, long carrierLen, int sampleLength,
 			// Que luego movemos al final
 			>> (8 - (b + n));
 		// Al LSB lo pisamos con el resultante
-		*((unsigned char *) ret + i + sampleLength / 8 - 1) =
+		*getTargetBytePointer(ret, i, sampleLength, bigEndianWav) =
+		//*((unsigned char *) ret + i + sampleLength / 8 - 1) =
 			carryingByte | bitsToPlace;
 		b += n;
 		if (b > 7) {
@@ -155,7 +174,8 @@ void *lsbNUnhide(void *message, long messageLen, int sampleLength,
 		unsigned int *hiddenMessageSize, char **hiddenMessageExtension, int n,
 		int expectsExtension, int bigEndianWav) {
 	if (messageLen <= 0 || sampleLength <= 0 || (sampleLength % 8) != 0
-			|| message == NULL || hiddenMessageSize == NULL || n > 8) {
+			|| message == NULL || hiddenMessageSize == NULL || n > 8
+			|| n < 0) {
 		fprintf(stderr, "Illegal parameters.");
 		return NULL;
 	}
@@ -172,6 +192,12 @@ void *lsbNUnhide(void *message, long messageLen, int sampleLength,
 			endian_swap(&msgSize);
 			printf("The size of the hidden msg is: %d bytes\n", msgSize);
 			*hiddenMessageSize = msgSize;
+			if (msgSize > messageLen) {
+				fprintf(stderr, "The message hidden size is aparrently bigger" \
+						" than the total message. This is invalid.");
+				free(ret);
+				return NULL;
+			}
 			// Ponemos j = 0 para pisar en la salida el numero
 			j = 0;
 		}
@@ -201,8 +227,9 @@ void *lsbNUnhide(void *message, long messageLen, int sampleLength,
 		// Al ultimo byte de la muestra nos quedamos solo con los n
 		// que importan.
 		unsigned char data =
-			*((unsigned char *) message + i +
-					(sampleLength / 8) - 1) & carrierMask;
+			//*((unsigned char *) message + i + (sampleLength / 8) - 1)
+			*getTargetBytePointer(message, i, sampleLength, bigEndianWav)
+			& carrierMask;
 		unsigned char currentValue =
 			*((unsigned char *) ret + j);
 		*((unsigned char *) ret + j) =
