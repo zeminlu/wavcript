@@ -140,7 +140,7 @@ t_mode parseMode(char *mode) {
 }
 
 t_steg_alg parseStegAlg(char *mode) {
-	char *modes[] = {"lsb1", "lsb4", "lsbe"};
+	char *modes[] = {"lsbe", "lsb1", "lsb2", "lsb3", "lsb4", "lsb4", "lsb5", "lsb6", "lsb7", "lsb8"};
 	int elems = sizeof(modes) / sizeof(char*);
 	int i = 0;
 	for(i = 0; i < elems; i++) {

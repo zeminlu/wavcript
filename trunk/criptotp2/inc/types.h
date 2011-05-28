@@ -8,8 +8,6 @@
 #ifndef TYPES_H_
 #define TYPES_H_
 
-#define LSBN 1
-
 /*
  * Aca todas las estructuras
  */
@@ -67,9 +65,15 @@ typedef enum {
 } t_steg_mode;
 
 typedef enum {
-    LSB1 = 0,
+    LSBE = 0,
+    LSB1,
+    LSB2,
+    LSB3,
     LSB4,
-    LSBE
+    LSB5,
+    LSB6,
+    LSB7,
+    LSB8
 } t_steg_alg;
 
 typedef enum {
