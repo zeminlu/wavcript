@@ -30,4 +30,6 @@ t_alg parseAlgorithm(char *algorithm);
 
 t_steg_alg parseStegAlg(char *mode);
 
+t_steg_alg parseEndianMode(char *mode);
+
 #endif

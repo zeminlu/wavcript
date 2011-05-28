@@ -15,13 +15,14 @@
  * encountered. Note that the size of the resulting message is the same
  * as the carrier's message size. The *carrier should be pointing to the
  * first sample to modify (not the header). SampleLength and n is in bits.
+ * If n is 0 then it LSBE is used.
  */
 void *lsbNHide(void *carrier, long carrierLen, int sampleLen,
 		void *msgToHide, unsigned int msgToHideLen, char *msgToHideExtension,
 		int n, int bigEndianWav);
 
 void *lsbNHideCrypted(void *carrier, long carrierLen, int sampleLen,
-		void *msgToHide, int msgToHideLen, int bigEndianWav);
+		void *msgToHide, int msgToHideLen, int n, int bigEndianWav);
 
 /**
  * Will return the hidden message and will output in hiddenMessageSize

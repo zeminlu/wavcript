@@ -163,7 +163,7 @@ t_steg_alg parseStegAlg(char *mode) {
 }
 
 t_steg_alg parseEndianMode(char *mode) {
-	char *modes[] = {"big", "little"};
+	char *modes[] = {"little", "big"};
 	int elems = sizeof(modes) / sizeof(char*);
 	int i = 0;
 	for(i = 0; i < elems; i++) {
