@@ -23,10 +23,10 @@
  */
 void *lsbNUnhide(void *message, long messageLen, int sampleLength,
 		unsigned int *hiddenMessageSize, char **hiddenMessageExtension, int n,
-		int expectsExtension);
+		int expectsExtension, int bigEndianWav);
 
 void *hideMessage(void *carrier, long carrierLen, int sampleLength,
-		void *msgToHide, int msgToHideLen, int n);
+		void *msgToHide, int msgToHideLen, int n, int bigEndianWav);
 
 /**
  * Public Methods
@@ -37,7 +37,7 @@ void *hideMessage(void *carrier, long carrierLen, int sampleLength,
 
 void *lsbNHide(void *carrier, long carrierLen, int sampleLength,
 		void *msgToHide, unsigned int msgToHideLen, char *msgToHideExtension,
-		int n) {
+		int n, int bigEndianWav) {
 	int extLen = 
 		(msgToHideExtension == NULL) ? 0 : strlen(msgToHideExtension) + 1;
 	int completeMsgLen = 4 + msgToHideLen + extLen;
@@ -56,27 +56,28 @@ void *lsbNHide(void *carrier, long carrierLen, int sampleLength,
 		memcpy(completeMsg + 4 + msgToHideLen, msgToHideExtension, extLen);
 	}
 	return hideMessage(carrier, carrierLen, sampleLength, completeMsg,
-			completeMsgLen, n);
+			completeMsgLen, n, bigEndianWav);
 }
 
 void *lsbNHideCrypted(void *carrier, long carrierLen, int sampleLength,
-		void *msgToHide, int msgToHideLen, int n) {
+		void *msgToHide, int msgToHideLen, int n, int bigEndianWav) {
 	return lsbNHide(carrier, carrierLen, sampleLength, msgToHide,
-			msgToHideLen, NULL, n);
+			msgToHideLen, NULL, n, bigEndianWav);
 }
 
 // Extract related methods.
 
 void *lsbNExtract(void *message, long messageLen, int sampleLen,
-		unsigned int *hiddenMessageSize, char **hiddenMessageExtension, int n) {
+		unsigned int *hiddenMessageSize, char **hiddenMessageExtension,
+		int n, int bigEndianWav) {
 	return lsbNUnhide(message, messageLen, sampleLen, hiddenMessageSize,
-			hiddenMessageExtension, n, SA_TRUE);
+			hiddenMessageExtension, n, SA_TRUE, bigEndianWav);
 }
 
 void *lsbNExtractCrypted(void *message, long messageLen, int sampleLen,
-		unsigned int *hiddenMessageSize, int n) {
+		unsigned int *hiddenMessageSize, int n, int bigEndianWav) {
 	return lsbNUnhide(message, messageLen, sampleLen, hiddenMessageSize,
-			NULL, n, SA_FALSE);
+			NULL, n, SA_FALSE, bigEndianWav);
 }
 
 /**
@@ -84,7 +85,7 @@ void *lsbNExtractCrypted(void *message, long messageLen, int sampleLen,
  * ===============
  */
 void *hideMessage(void *carrier, long carrierLen, int sampleLength,
-		void *msgToHide, int msgToHideLen, int n) {
+		void *msgToHide, int msgToHideLen, int n, int bigEndianWav) {
 	if (carrierLen <= 0 || sampleLength <= 0 || (sampleLength % 8) != 0
 			|| msgToHideLen <= 0 || n > 8) {
 		fprintf(stderr, "Illegal parameters.");
@@ -152,7 +153,7 @@ void *hideMessage(void *carrier, long carrierLen, int sampleLength,
 
 void *lsbNUnhide(void *message, long messageLen, int sampleLength,
 		unsigned int *hiddenMessageSize, char **hiddenMessageExtension, int n,
-		int expectsExtension) {
+		int expectsExtension, int bigEndianWav) {
 	if (messageLen <= 0 || sampleLength <= 0 || (sampleLength % 8) != 0
 			|| message == NULL || hiddenMessageSize == NULL || n > 8) {
 		fprintf(stderr, "Illegal parameters.");

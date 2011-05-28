@@ -18,10 +18,10 @@
  */
 void *lsbNHide(void *carrier, long carrierLen, int sampleLen,
 		void *msgToHide, unsigned int msgToHideLen, char *msgToHideExtension,
-		int n);
+		int n, int bigEndianWav);
 
 void *lsbNHideCrypted(void *carrier, long carrierLen, int sampleLen,
-		void *msgToHide, int msgToHideLen, int n);
+		void *msgToHide, int msgToHideLen, int bigEndianWav);
 
 /**
  * Will return the hidden message and will output in hiddenMessageSize
@@ -29,10 +29,11 @@ void *lsbNHideCrypted(void *carrier, long carrierLen, int sampleLen,
  * found in message.
  */
 void *lsbNExtract(void *message, long messageLen, int sampleLength,
-		unsigned int *hiddenMessageSize, char **hiddenMessageExtension, int n);
+		unsigned int *hiddenMessageSize, char **hiddenMessageExtension,
+		int n, int bigEndianWav);
 
 
 void *lsbNExtractCrypted(void *message, long messageLen, int sampleLen,
-		unsigned int *hiddenMessageSize, int n);
+		unsigned int *hiddenMessageSize, int n, int bigEndianWav);
 
 #endif
