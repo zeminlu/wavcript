@@ -11,8 +11,8 @@
 #include <stdio.h>
 #include "../inc/cutils.h"
 
-void endian_swap(unsigned int * x){
-    *x = (*x>>24) | ((*x<<8) & 0x00FF0000) | ((*x>>8) & 0x0000FF00) | (*x<<24);
+void endian_swap(unsigned int *x){
+    *x = (*x >> 24) | ((*x << 8) & 0x00FF0000) | ((*x >> 8) & 0x0000FF00) | (*x << 24);
     
     return;
 }
