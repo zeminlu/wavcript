@@ -88,11 +88,15 @@ int main (int argc, char* argv[]) {
     	    
     	    cryptData = malloc(sizeof(char) * (toCryptSize + 32)); //el 32 es el pulmoncito para el padding    	    
     	    cryptSize = (unsigned int) cryptWithPass(toCryptData, toCryptSize, cryptData, inputStruct->operation, inputStruct->algorithm, inputStruct->mode, inputStruct->pass);
-            stegData = lsbNHideCrypted(sound, wf->chunkdatasize, wf->wBitsPerSample, cryptData, cryptSize, inputStruct->stegAlg, inputStruct->endianMode);
+            if ((stegData = lsbNHideCrypted(sound, wf->chunkdatasize, wf->wBitsPerSample, cryptData, cryptSize, inputStruct->stegAlg, inputStruct->endianMode)) == NULL){
+                return -1;
+            }
                         
             varFree(2, toCryptData, cryptData);      
         } else {
-            stegData = lsbNHide(sound, wf->chunkdatasize, wf->wBitsPerSample, data, dataSize, extension, inputStruct->stegAlg, inputStruct->endianMode);
+            if ((stegData = lsbNHide(sound, wf->chunkdatasize, wf->wBitsPerSample, data, dataSize, extension, inputStruct->stegAlg, inputStruct->endianMode)) == NULL){
+                return -1;
+            }
         }
         
         WaveFile_Write(inputStruct->output, wf, stegData);
@@ -100,7 +104,9 @@ int main (int argc, char* argv[]) {
         varFree(3, data, extension, stegData);
 	} else {    	    
 	    if (inputStruct->pass != NULL){
-	        hiddenData = lsbNExtractCrypted(sound, wf->chunkdatasize, wf->wBitsPerSample, &hiddenDataSize, inputStruct->stegAlg, inputStruct->endianMode);
+	        if ((hiddenData = lsbNExtractCrypted(sound, wf->chunkdatasize, wf->wBitsPerSample, &hiddenDataSize, inputStruct->stegAlg, inputStruct->endianMode)) == NULL){
+                return -1;
+	        }
     	
 	        decryptData = malloc(sizeof(char) * hiddenDataSize);
             cryptSize = (unsigned int) cryptWithPass(hiddenData, hiddenDataSize, decryptData, inputStruct->operation, inputStruct->algorithm, inputStruct->mode, inputStruct->pass);
@@ -115,7 +121,9 @@ int main (int argc, char* argv[]) {
             
             varFree(2, decryptData, hiddenData);
 	    } else {
-	        data = lsbNExtract(sound, wf->chunkdatasize, wf->wBitsPerSample, &dataSize, &extension, inputStruct->stegAlg, inputStruct->endianMode);
+	        if ((data = lsbNExtract(sound, wf->chunkdatasize, wf->wBitsPerSample, &dataSize, &extension, inputStruct->stegAlg, inputStruct->endianMode)) == NULL){
+                return -1;
+	        }
 	    }
 	    
         filenamelength = strlen(inputStruct->output) + strlen(extension) + 1;
@@ -125,7 +133,9 @@ int main (int argc, char* argv[]) {
         strcat(filename, extension);
 		printf("%s", extension);
         
-        writeFile(filename, data, (long) dataSize);
+        if (writeFile(filename, data, (long) dataSize) <= 0){
+            return -1;
+        }
         varFree(3, data, extension, filename);
 	   	printf("freed!"); 
 	}    	
