@@ -25,10 +25,11 @@ unsigned char getTargetByte(void *ret, unsigned int i, int sampleLength);
 
 void *lsbNUnhide(void *message, long messageLen, int sampleLength,
 		unsigned int *hiddenMessageSize, char **hiddenMessageExtension, int n,
-		int expectsExtension, int bigEndianWav);
+		int expectsExtension, int bigEndianWav, int enhancedMode);
 
 void *hideMessage(void *carrier, long carrierLen, int sampleLength,
-		void *msgToHide, int msgToHideLen, int n, int bigEndianWav);
+		void *msgToHide, int msgToHideLen, int n, int bigEndianWav,
+		int enhanceMode);
 
 /**
  * Public Methods
@@ -57,8 +58,15 @@ void *lsbNHide(void *carrier, long carrierLen, int sampleLength,
 		printf("The file to hide has an extension %s\n", msgToHideExtension);
 		memcpy(completeMsg + 4 + msgToHideLen, msgToHideExtension, extLen);
 	}
+	int enhancedMode = SA_FALSE;
+	if (n == 0) {
+		// Operating in enhaced mode => n = 1, enhancedMode = True
+		n = 1;
+		enhancedMode = SA_TRUE;
+		sampleLength = 8;
+	}
 	return hideMessage(carrier, carrierLen, sampleLength, completeMsg,
-			completeMsgLen, n, bigEndianWav);
+			completeMsgLen, n, bigEndianWav, enhancedMode);
 }
 
 void *lsbNHideCrypted(void *carrier, long carrierLen, int sampleLength,
@@ -72,14 +80,30 @@ void *lsbNHideCrypted(void *carrier, long carrierLen, int sampleLength,
 void *lsbNExtract(void *message, long messageLen, int sampleLen,
 		unsigned int *hiddenMessageSize, char **hiddenMessageExtension,
 		int n, int bigEndianWav) {
+	int enhancedMode = SA_FALSE;
+	if (n == 0) {
+		// Operating in enhaced mode => n = 1, enhancedMode = True
+		n = 1;
+		enhancedMode = SA_TRUE;
+		sampleLen = 8;
+	}
 	return lsbNUnhide(message, messageLen, sampleLen, hiddenMessageSize,
-			hiddenMessageExtension, n, SA_TRUE, bigEndianWav);
+			hiddenMessageExtension, n, SA_TRUE, bigEndianWav,
+			enhancedMode);
 }
 
 void *lsbNExtractCrypted(void *message, long messageLen, int sampleLen,
 		unsigned int *hiddenMessageSize, int n, int bigEndianWav) {
+	int enhancedMode = SA_FALSE;
+	if (n == 0) {
+		// Operating in enhaced mode => n = 1, enhancedMode = True
+		// sampleLength = 8
+		n = 1;
+		enhancedMode = SA_TRUE;
+		sampleLen = 8;
+	}
 	return lsbNUnhide(message, messageLen, sampleLen, hiddenMessageSize,
-			NULL, n, SA_FALSE, bigEndianWav);
+			NULL, n, SA_FALSE, bigEndianWav, enhancedMode);
 }
 
 /**
@@ -101,7 +125,8 @@ unsigned char *getTargetBytePointer(void *ret, int i, int sampleLength,
 }
 
 void *hideMessage(void *carrier, long carrierLen, int sampleLength,
-		void *msgToHide, int msgToHideLen, int n, int bigEndianWav) {
+		void *msgToHide, int msgToHideLen, int n, int bigEndianWav,
+		int enhancedMode) {
 	if (carrierLen <= 0 || sampleLength <= 0 || (sampleLength % 8) != 0
 			|| msgToHideLen <= 0 || n > 8 || n < 0) {
 		fprintf(stderr, "Illegal parameters.");
@@ -118,10 +143,14 @@ void *hideMessage(void *carrier, long carrierLen, int sampleLength,
 	}
 	int i = 0, j = 0, b = 0;
 	unsigned char carrierMask = 0xFF << n; // leaves the space for n bits
-	for (; i < carrierLen && j < msgToHideLen; i += (sampleLength / 8)) {
+	for (; i < carrierLen && j < msgToHideLen; i += sampleLength / 8) {
 		// Copiamos una muestra a la salida.
 		memcpy((unsigned char *) ret + i,
-			(unsigned char *) carrier + i, (sampleLength / 8));
+			(unsigned char *) carrier + i, sampleLength / 8);
+		if (enhancedMode && *((unsigned char *) ret + i) != 0xFF
+				&& *((unsigned char *) ret + i) != 0xFE) {
+			continue;
+		}
 		// Al ultimo byte de la muestra le ponemos el hueco para poner n bits
 		// En carryingByte quedo lo que habia antes con n ceros al final
 		// para pisar.
@@ -159,7 +188,10 @@ void *hideMessage(void *carrier, long carrierLen, int sampleLength,
 		}
 	}
 	if (i == carrierLen) {
-		fprintf(stderr, "No space in carrier to hide msg with the given n\n");
+		fprintf(stderr, "No space in carrier to hide msg with the given n=%d\n", n);
+		fprintf(stderr, "The maximum capacity of the carrier is %d bytes\n",
+				(carrierLen / sampleLength) * n / 8);
+		fprintf(stderr, "Size of message to hide: %d\n", msgToHideLen);
 		free(ret);
 		return NULL;
 	}
@@ -172,7 +204,7 @@ void *hideMessage(void *carrier, long carrierLen, int sampleLength,
 
 void *lsbNUnhide(void *message, long messageLen, int sampleLength,
 		unsigned int *hiddenMessageSize, char **hiddenMessageExtension, int n,
-		int expectsExtension, int bigEndianWav) {
+		int expectsExtension, int bigEndianWav, int enhancedMode) {
 	if (messageLen <= 0 || sampleLength <= 0 || (sampleLength % 8) != 0
 			|| message == NULL || hiddenMessageSize == NULL || n > 8
 			|| n < 0) {
@@ -186,6 +218,11 @@ void *lsbNUnhide(void *message, long messageLen, int sampleLength,
 	int isInExtension = 0;
 	for (; i < messageLen; i += (sampleLength / 8)) {
 		// printf("DEBUG: i: %d, j: %d b:%d\n", i, j, b);
+		unsigned char info = 
+			*getTargetBytePointer(message, i, sampleLength, bigEndianWav);
+		if (enhancedMode && info != 0xFF && info != 0xFE) {
+			continue;
+		}
 		if (j == 4 && b == 0 && msgSize == 0) {
 			// Ya tenemos el numero
 			memcpy(&msgSize, ret, 4); 
