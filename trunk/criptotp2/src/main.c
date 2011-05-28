@@ -76,7 +76,7 @@ int main (int argc, char* argv[]) {
         
         extension = getFileExtension(inputStruct->input);
         if (inputStruct->pass != NULL){
-            toCryptSize = 4 + dataSize + strlen(extension);
+            toCryptSize = 4 + dataSize + strlen(extension) + 1;
             toCryptData = malloc (sizeof(char) * toCryptSize);      
             
             endian_swap(&dataSize); //ENDIANNN
@@ -84,7 +84,7 @@ int main (int argc, char* argv[]) {
             endian_swap(&dataSize); //NO ENDIANNN
             
             memcpy((char *)toCryptData + 4, data, dataSize);
-            memcpy((char *)toCryptData + (4 + dataSize), extension, strlen(extension));    
+            memcpy((char *)toCryptData + (4 + dataSize), extension, strlen(extension) + 1);    
     	    
     	    cryptData = malloc(sizeof(char) * (toCryptSize + 32)); //el 32 es el pulmoncito para el padding    	    
     	    cryptSize = (unsigned int) cryptWithPass(toCryptData, toCryptSize, cryptData, inputStruct->operation, inputStruct->algorithm, inputStruct->mode, inputStruct->pass);
@@ -118,8 +118,8 @@ int main (int argc, char* argv[]) {
 	        data = lsbNExtract(sound, wf->chunkdatasize, wf->wBitsPerSample, &dataSize, &extension, inputStruct->stegAlg);
 	    }
 	    
-        filenamelength = strlen(inputStruct->output) + strlen(extension);
-        char *filename = malloc(sizeof(char) * filenamelength);
+        filenamelength = strlen(inputStruct->output) + strlen(extension) + 1;
+        char *filename = calloc(1, sizeof(char) * filenamelength);
         
         strcpy(filename, inputStruct->output);
         strcat(filename, extension);
