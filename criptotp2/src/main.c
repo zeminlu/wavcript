@@ -16,7 +16,7 @@ int main (int argc, char* argv[]) {
 		return EXIT_FAILURE;
 	}
 	
-	if(inputStruct == NULL) {
+/*	if(inputStruct == NULL) {
 		printf("TODO MAL \n");
 		printf("input = %s\n", inputStruct->input);
 		printf("output = %s\n", inputStruct->output);
@@ -41,7 +41,7 @@ int main (int argc, char* argv[]) {
 		printf("\n");
 //		return 0;
 	}
-	
+*/	
     void *sound;
     
     WaveFile *wf = malloc(sizeof(WaveFile));
@@ -131,17 +131,14 @@ int main (int argc, char* argv[]) {
         
         strcpy(filename, inputStruct->output);
         strcat(filename, extension);
-		printf("%s", extension);
         
         if (writeFile(filename, data, (long) dataSize) <= 0){
             return -1;
         }
         varFree(3, data, extension, filename);
-	   	printf("freed!"); 
 	}    	
     
     varFree(2, wf, sound);
-	   	printf("freed!"); 
 	
 	return 0;
 }
