@@ -55,7 +55,7 @@ void *lsbNHide(void *carrier, long carrierLen, int sampleLength,
 	memcpy(completeMsg, &msgToHideLenEndianIndependant, 4);
 	memcpy(completeMsg + 4, msgToHide, msgToHideLen);
 	if (extLen > 0) {
-		//printf("The file to hide has an extension %s\n", msgToHideExtension);
+		printf("The file to hide has an extension %s\n", msgToHideExtension);
 		memcpy(completeMsg + 4 + msgToHideLen, msgToHideExtension, extLen);
 	}
 	int enhancedMode = SA_FALSE;
@@ -234,7 +234,7 @@ void *lsbNUnhide(void *message, long messageLen, int sampleLength,
 			*hiddenMessageSize = msgSize;
 			if (msgSize > messageLen || msgSize < 0) {
 				fprintf(stderr, "The message hidden size is aparrently bigger" \
-						" than the total message or less than 0. This is invalid.");
+						" than the total message or less than 0. This is invalid.\n");
 				free(ret);
 				return NULL;
 			}

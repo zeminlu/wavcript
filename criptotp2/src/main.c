@@ -126,16 +126,25 @@ int main (int argc, char* argv[]) {
 	        }
 	    }
 	    
-        filenamelength = strlen(inputStruct->output) + strlen(extension) + 1;
+        filenamelength = strlen(inputStruct->output) + (extension == NULL ? 0 : strlen(extension)) + 1;
         char *filename = calloc(1, sizeof(char) * filenamelength);
         
         strcpy(filename, inputStruct->output);
-        strcat(filename, extension);
-        
+        if (extension != NULL){
+			strcat(filename, extension);
+		}
         if (writeFile(filename, data, (long) dataSize) <= 0){
             return -1;
         }
-        varFree(3, data, extension, filename);
+
+        varFree(2, data, filename);
+
+		if (extension != NULL){
+			free(extension);	
+		}else{
+			printf("No extension, probably bad steg alg\n");
+		}
+		
 	}    	
     
     varFree(2, wf, sound);
