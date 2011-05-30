@@ -55,7 +55,7 @@ void *lsbNHide(void *carrier, long carrierLen, int sampleLength,
 	memcpy(completeMsg, &msgToHideLenEndianIndependant, 4);
 	memcpy(completeMsg + 4, msgToHide, msgToHideLen);
 	if (extLen > 0) {
-		printf("The file to hide has an extension %s\n", msgToHideExtension);
+		//printf("The file to hide has an extension %s\n", msgToHideExtension);
 		memcpy(completeMsg + 4 + msgToHideLen, msgToHideExtension, extLen);
 	}
 	int enhancedMode = SA_FALSE;
@@ -129,7 +129,7 @@ void *hideMessage(void *carrier, long carrierLen, int sampleLength,
 		int enhancedMode) {
 	if (carrierLen <= 0 || sampleLength <= 0 || (sampleLength % 8) != 0
 			|| msgToHideLen <= 0 || n > 8 || n < 0) {
-		fprintf(stderr, "Illegal parameters.");
+		fprintf(stderr, "Illegal parameters.\n");
 		return NULL;
 	}
 	void *ret = malloc(carrierLen);
@@ -208,7 +208,7 @@ void *lsbNUnhide(void *message, long messageLen, int sampleLength,
 	if (messageLen <= 0 || sampleLength <= 0 || (sampleLength % 8) != 0
 			|| message == NULL || hiddenMessageSize == NULL || n > 8
 			|| n < 0) {
-		fprintf(stderr, "Illegal parameters.");
+		fprintf(stderr, "Illegal parameters.\n");
 		return NULL;
 	}
 	void *ret = calloc(1, 1);
@@ -229,9 +229,9 @@ void *lsbNUnhide(void *message, long messageLen, int sampleLength,
 			endian_swap(&msgSize);
 			printf("The size of the hidden msg is: %d bytes\n", msgSize);
 			*hiddenMessageSize = msgSize;
-			if (msgSize > messageLen) {
+			if (msgSize > messageLen || msgSize < 0) {
 				fprintf(stderr, "The message hidden size is aparrently bigger" \
-						" than the total message. This is invalid.");
+						" than the total message. This is invalid.\n");
 				free(ret);
 				return NULL;
 			}
@@ -242,17 +242,17 @@ void *lsbNUnhide(void *message, long messageLen, int sampleLength,
 			if (expectsExtension) {
 				// Arranca la extension
 				isInExtension = 1;
-				printf("The extension begins");
+				printf("The extension begins\n");
 			} else {
 				// Sino terminamos (pq no se espera extension)
-				printf("No extension expected. Ending");
+				printf("No extension expected. Ending\n");
 				break;
 			}
 		}
 		if (isInExtension && j > msgSize && b == 0) {
 			// Ya podría estar el null
 			if (*((unsigned char *) ret + j - 1) == '\0') {
-				printf("La extension del archivo es: %s",
+				printf("La extension del archivo es: %s\n",
 					(unsigned char *) ret + msgSize);
 				char *ext = (char *) ret + msgSize;
 				int extLen = strlen(ext);

@@ -1,0 +1,4 @@
+6a: video para 6b OK
+6b: Adivine
+6c: LSB1 no crypt -> .png -> mv -> .zip -> unzip -> .txt -> instrucciones para pass para 6a OK
+6d: LSBE no crypt OK
