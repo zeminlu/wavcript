@@ -202,6 +202,8 @@ void *hideMessage(void *carrier, long carrierLen, int sampleLength,
 	return ret;
 }
 
+// Si no tiene una extension null terminada devuelve NULL en
+// *hiddenMessageExtension
 void *lsbNUnhide(void *message, long messageLen, int sampleLength,
 		unsigned int *hiddenMessageSize, char **hiddenMessageExtension, int n,
 		int expectsExtension, int bigEndianWav, int enhancedMode) {
@@ -211,6 +213,7 @@ void *lsbNUnhide(void *message, long messageLen, int sampleLength,
 		fprintf(stderr, "Illegal parameters.\n");
 		return NULL;
 	}
+	*hiddenMessageExtension = NULL;
 	void *ret = calloc(1, 1);
 	unsigned char carrierMask = ~(0xFF << n); // leaves the space for n bits
 	unsigned int i = 0, j = 0, b = 0;
@@ -231,7 +234,7 @@ void *lsbNUnhide(void *message, long messageLen, int sampleLength,
 			*hiddenMessageSize = msgSize;
 			if (msgSize > messageLen || msgSize < 0) {
 				fprintf(stderr, "The message hidden size is aparrently bigger" \
-						" than the total message. This is invalid.\n");
+						" than the total message or less than 0. This is invalid.");
 				free(ret);
 				return NULL;
 			}
