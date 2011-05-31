@@ -177,6 +177,10 @@ Archivo portador & Archivo recuperado \\
 \end{table}
 
 \subsection{Ejercicio 6.6}
+\noindent El archivo en cuestión era un archivo de imágen .png, al cual se le pudo cambiar la extensión a .zip, y mediante el comando unzip, descomprimir un archivo de texto que incluía información relevante para otros archivos del TP. La forma de realizar esto es la siguiente: se utiliza el comando 'cat' y el operador de redirección $>$, por ejemplo, 'cat imagen.png comprimido.zip $>$ imagenconcomprimido.zip'\\
+\noindent Lo que realiza esto, es concatenar ambos archivos y escribir la totalidad en otro archivo de extension .png. \\
+\noindent La razón de porqué puede visualizarse la imagen y a la vez obtener el contenido del comprimido a partir de un mismo archivo, es debido a que si bien para que la imagen no se corrompa, el header y contenido de la misma deben estar al comienzo del archivo, no ocurre lo mismo con los comprimidos .zip, dado que la utilidad unzip utilizada para descomprimirlo, no requiere que el header y contenido del mismo se encuentren al principio, porque detecta los datos excedentes del comienzo y permite descomprimir el archivo de todas maneras, simplemente ignorando el contenido de la imagen.\\
+\noindent Si en cambio realizaramos esto intercambiando el orden de los archivos, por ejemplo, 'cat comprimido.zip imagen.png $>$ imagenconcomprimido.zip', la imagen no podría ser visualizada por los motivos antes mencionados.
 
 \subsection{Ejercicio 6.7}
 
