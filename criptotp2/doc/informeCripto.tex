@@ -64,4 +64,129 @@ El porcentaje de cambio sufrido en cada una es de: \\
 Lo que da como resultado que la posición más conveniente donde comenzar a guardar los datos es a partir de la primera muestra.\\
 Es importante aclarar que si se considera la posibilidad de comenzar a guardar la información en una posición que puede cambiar, también ésta debe ser almacenada en el archivo, dado que de lo contrario no sería posible recuperar la información oculta. Una opción sería ahora sí guardarla a partir de la primera muestra, dado que el ruido que puede producir una modificación tan pequeña como para sólo guardar un número con una posición es mucho menor probabilísticamente al que produce la modificación de tantas muestras seguidas como lo requiere guardar la información que se desea ocultar.
 
+\subsection{Ejercicio 6.2}
+
+\noindent Luego de esteganografiar un mismo archivo dentro de un mismo portador, habiendo obtenido 3 nuevos archivos de audio con la información, se los compara arribando a las conclusiones que se exponen a continuación.\\
+En primer lugar se intentó buscar algún tipo de ruido en los archivos obtenidos luego de esteganografiar, o algún tipo de diferencias respecto del original.\\
+Como no se encontró lo buscado, se procedió a analizar las pistas con el \textit{Audacity} intentando analizar la misma cuestión pero ahora de forma gráfica. Tampoco se obtuvieron resultados positivos.\\
+Por último, se buscaron diferencias entre los archivos abriendo cada uno de ellos con un editor hexadecimal, en particular se utilizó \textit{0xED}. Mediante este método de análisis se lograron ver diferencias entre ellos como era de esperarse.\\
+Cabe aclarar que se pudo ver que en este caso en particular, donde el archivo que se intentó ocultar era chico en tamaño, que los métodos de esteganografiado resultaron efectivos, al no develar la existencia de la información. De hecho, si no se contara con otros archivos con los que comparar, no se podría decir que ninguno de ellos tiene información oculta adentro.\\
+\\
+\noindent En cuanto a comparaciones del método se puede decir lo siguiente de cada uno de ellos:\\
+\begin{table}[H]
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Método & Ventajas & Desventajas\\
+\hline
+\hline
+LSB1 	& Al producir un cambio en el archivo, & Al modificar sólo 1 bit por muestra, \\
+	& el mismo es pequeño dado que sólo & necesita una mayor cantidad de muestras \\
+	& modifica 1 bit por muestra. Además, & para lograr ocultar el archivo completo.\\
+	& este bit es el menos significativo de la & Ésto no sólo ocasiona que el archivo \\
+	& muestra, por lo que el cambio es & portador tenga que ser más grande, sino  \\
+	& mínimo. & que también una vez producido el cambio \\
+	& & modifica una mayor cantidad de muestras.\\
+\hline
+LSB4 	& Al guardar 4 bits por muestra, &  Al producir un cambio en el archivo, \\
+	& la cantidad que necesita es menor & el mismo es más notorio que en LSB1, \\
+	& que en LSB1. Lo que ocasiona que & dado que a pesar de que modifica el byte \\
+	& el archivo portador pueda ser de &  menos significativo de la muestra, modifica \\
+	& menor tamaño. & 4 bits del mismo, en lugar de sólo 1. \\
+\hline
+LSBE 	& Al modificar sólo los bytes con valor & Por esta misma razón es que el archivo \\
+	& 254 o 255, las modificaciones se & portador debe ser de un tamaño mayor \\
+	& encuentran más distribuídas dentro & que en los casos de LSB1 y LSB4. \\
+	& del archivo portador, por lo que sería & Por otro lado, dado que el método no \\
+	& más complicado detectar cambios en & distingue entre el byte más y menos \\
+	& el mismo. Por otro lado, al cambiar & significativo, por lo que podría modificar \\
+	& sólo un bit los cambios son mínimos. & el más significativo, agregando así \\
+	& & una cantidad grande de ruido. \\
+\hline  
+\end{tabular}
+\end{center}
+\caption{Tabla de comparaciones de los métodos de esteganografiado analizados estableciendo ventajas y desventajas}
+\label{ventAdv}
+\end{table}
+
+\subsection{Ejercicio 6.3}
+
+\noindent La cuestión a analizar referida a dónde conviene guardar el tipo de archivo es un punto importante pensando en cúales serían las posibles formas de descubrir que hay información oculta dentro de un archivo.\\
+Una posibilidad sería analizar el archivo de audio intentando encontrar un header, o algún patrón que cumpla tal funcionalidad. El lugar más común donde se lo buscaría es en el comienzo de los datos del mismo.\\
+Dado que las posibles extensiones de archivos son limitadas, no sería difícil encontrarlas. Es por tal motivo que es preferible guardar la extensión al final y no al principio. La diferencia es que el tamaño, al ser un número, no podría ser distinguido como parte de los datos ocultos, mientras que lo mismo ocurre con los datos, pero las posibles extensiones sí pueden ser distinguidas.
+
+\subsection{Ejercicio 6.4}
+
+\noindent Para descubrir qué se había ocultado dentro de cada archivo, siempre teniendo en cuenta que se conocía que cada archivo ocultaba algo, se procedió de la siguiente manera:\\
+
+\noindent En primer lugar se obtuvo la información del archivo 6d.wav, utilizando el método LSBE. Se logró obtener un documento .pdf con una password.\\
+\\
+En segundo lugar se obtuvo la información del archivo 6c.wav, utilizando el método LSB1. Se logró obtener una imagen .png con un tablero del juego \textit{Buscaminas}.\\
+\\
+En tercer lugar se analizó con el editor hexadecimal el archivo 6b.wav, y se logró descubrir que al final del mismo se encontraba la frase:
+\begin{verbatim}
+al .png cambiar extension por .zip y descomprmir.
+\end{verbatim}
+
+\noindent Con la ayuda descubierta en el archivo anterior, y ya teniendo la imagen .png se procedió a hacer lo indicado. Se cambió la extensión a .zip, se descomprimió y se obtuvo un archivo .tex con más indicaciones.\\
+El mismo decía:
+\begin{verbatim}
+Cada mina es un 1.
+Cada fila forma una letra.
+Los ascii de las letras empiezan todos en 01.
+Asi encontraras el algoritmo que tiene clave de 256 bits y el modo
+La password esta en otro archivo
+Con algoritmo, modo y password hay un .wmv encriptado y oculto.
+\end{verbatim}
+
+\noindent Siguiendo la ayuda se armó con el tablero que se encontraba en la imagen .png una matriz de 0 y 1 según donde había o no minas.\\
+Se obtuvo la siguiente matriz, que convertida a código ASCII decía lo siguiente:\\
+
+\noindent 0100 0001 = 0x41 = A \\
+0110 0101 = 0x65 = e \\
+0111 0011 = 0x73 = s \\
+0100 0101 = 0x45 = E \\
+0110 0011 = 0x63 = c \\
+0110 0010 = 0x62 = b \\
+
+\noindent Por último, utilizando el método LSB4, la password obtenida anteriormente y el método de encriptación con el modo recién descubiertos se procedió a obtener la información del archivo 6a.wav. Lo que se obtuvo fue un video .wmv.
+
+\subsection{Ejercicio 6.5}
+
+Lo que se encontró en cada archivo fue explicado en el inciso anterior, pero se mostrará en un cuadro a continuación:
+
+\begin{table}[H]
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+Archivo portador & Archivo recuperado \\
+\hline
+\hline
+6a.wav & video .wmv \\
+\hline
+6b.wav & frase guardada en Hexa\\
+\hline
+6c.wav & imagen .png \\
+\hline  
+6d.wav & documento .pdf \\
+\hline  
+\end{tabular}
+\end{center}
+\caption{Tabla que indica qué se logró recuperar de cada uno de los archivos provistos por la cátedra}
+\label{found}
+\end{table}
+
+\subsection{Ejercicio 6.6}
+
+\subsection{Ejercicio 6.7}
+
+\noindent El portador del video era el archivo 6a.wav. \\ El video encontrado era un fragmento en el que se explicaba una forma de ocultar información en telares usado en el pasado.
+
+\subsection{Ejercicio 6.8}
+
+\noindent El método de esteganografiado utilizado que no era LSB consistía simplemente en guardar los caracteres que formaban la frase que se quería guadar en formato hexadecimal en el archivo. En este caso en particular lo hacía en el final del mismo.\\
+El método no es eficiente dado la información puede ser vista simplemente con un editor hexadecimal. Además de que el cambio que produce en la estructura del archivo original es muy grande ya que modifica muestras completas, en lugar del último bit de cada una de ellas.\\
+
+\subsection{Ejercicio 6.9}
+
 \end{document}
