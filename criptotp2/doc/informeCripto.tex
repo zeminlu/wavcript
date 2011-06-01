@@ -119,11 +119,12 @@ Dado que las posibles extensiones de archivos son limitadas, no sería difícil 
 
 \noindent Para descubrir qué se había ocultado dentro de cada archivo, siempre teniendo en cuenta que se conocía que cada archivo ocultaba algo, se procedió de la siguiente manera:\\
 
-\noindent En primer lugar se obtuvo la información del archivo 6d.wav, utilizando el método LSBE. Se logró obtener un documento .pdf con una password.\\
-\\
-En segundo lugar se obtuvo la información del archivo 6c.wav, utilizando el método LSB1. Se logró obtener una imagen .png con un tablero del juego \textit{Buscaminas}.\\
-\\
-En tercer lugar se analizó con el editor hexadecimal el archivo 6b.wav, y se logró descubrir que al final del mismo se encontraba la frase:
+\noindent En primer lugar se analizaron los archivos proporcionados .wav, viendo que 2 de ellos eran la misma canción. Sin conocimiento alguno del esteganografiado de los 4 archivos, se procedió a aprovechar la semejanza del 6c.wav y 6d.wav para su comparación, dado que un diff byte a byte probablemente permitiría descifrar el/los algoritmo/s de esteganografiado utilizados en los mismos.
+\noindent Luego de realizar la comparación byte a byte, se notó que gran parte de los archivos en los que diferían, poseían el valor $FF$ o $FE$, lo cual apuntaba a que uno de los archivos poseía esteganografiado con algoritmo LSBE. Por otra parte, el resto de los bytes en que diferían, eran siempre el byte de la izquierda de cada muestra, que en archivos .wav es el byte menos significativo de la muestra, y además diferían en tan solo 1 bit, el menos significativo del byte. Esto apuntaba a que el otro archivo poseía un esteganografiado con algoritmo LSB1.\\
+\noindent Una vez descifrados los dos algoritmos utilizados por los archivos, se procedió a probar ambos en el archivo 6d.wav para su desesteganografiado, de lo que resultó que el algoritmo indicado era LSBE. Luego, el algoritmo utilizado por el archivo 6c.wav era LSB1, lo cual se corroboró al desesteganografiarlo con dicho algoritmo.\\
+\noindent Se obtuvo la información del archivo 6d.wav, que resultó ser un documento .pdf con una password.\\
+\noindent Por otra parte, la información del archivo 6c.wav resultó ser una imagen .png con un tablero del juego \textit{Buscaminas}.\\
+\noindent En tercer lugar, dado que se sabía que uno de los archivos restantes escondía información sin utilizar un algoritmo LSB, y dado que la cátedra sugirió analizar el archivo en cuestión con un editor hexadecimal o audacity, se procedió a analizar ambos archivos con un editor hexadecimal. En el archivo 6a.wav no se logró observar ningún tipo de información fácilmente relevante, pero en el archivo 6b.wav se logró descubrir que al final del mismo se encontraba la frase:
 \begin{verbatim}
 al .png cambiar extension por .zip y descomprmir.
 \end{verbatim}
