@@ -194,5 +194,9 @@ La forma de realizar ésto es la siguiente: se utiliza el comando 'cat' y el ope
 El método no es eficiente dado la información puede ser vista simplemente con un editor hexadecimal. Además de que el cambio que produce en la estructura del archivo original es muy grande ya que modifica muestras completas, en lugar del último bit de cada una de ellas.\\
 
 \subsection{Ejercicio 6.9}
+\noindent Al programa stegowav se le ha implementado una gran mejora, la cual consiste en permitir utilizar algoritmos LSBN, para $1 <= N <= 7$, dado que la implementación genérica de LSBN por así decirlo, resultaba mucho más prolija y con mínima repetición de código. \\
+\noindent A futuro, se puede mejorar esta funcionalidad permitiendo N mayores, hasta el tamaño de la muestra, lo cual no representa una dificultad considerable.\\
+\noindent Otra mejora útil podría ser permitir distintos tipos de archivos carrier, y no sólo .wav. Esto tampoco representa una gran dificultad. \\
+\noindent Por último, podría implementarse una mejora que permita pedirle al programa que comprima la salida esteganografiada (con o sin encripción) en un archivo .zip, y que lo embeba en un archivo de imágen, por ejemplo .png, tal y como se dio con la imágen obtenida del archivo 6c.wav.
 
 \end{document}
