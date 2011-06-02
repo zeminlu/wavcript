@@ -33,7 +33,7 @@
 \section{Introducción}
 
 \noindent En el presente documento se analizan cuestiones referentes al campo de la esteganografía. \\
-Se elaboran conclusiones respecto al método en sí mismo, y cómo se lo podría mejorar. Además se lo combina con conceptos de criptografía para complementarlo y aumentar su seguridad. \\
+Se elaboran conclusiones respecto al método en sí mismo, y cómo se lo podría mejorar. Además se lo combina con conceptos de criptografía para complementarlo y aumentar su seguridad.
 
 \section{Cuestiones a analizar}
 
@@ -41,7 +41,7 @@ Se elaboran conclusiones respecto al método en sí mismo, y cómo se lo podría
 
 \noindent Respecto de dónde comezar a guardar el archivo a ocultar se debe tener en cuenta un punto importante.\\
 En la encriptación, comunmente se conoce que la información existe, pero se desea ocultarla. En la esteganogrfía, por el contrario, lo que se desea ocultar es la existencia misma de la información. Por tal motivo, a menos que se use esteganografía y encriptación en conjunto, si se sospechara de la existencia de la información no sería difícil que eventualmente se pudiera acceder a ella.\\
-Por lo tanto, en un escenario de esteganogrfía puro (sin encriptar la información antes de ser ocultada), es altamente deseable que una vez que el archivo portador ya fue modificado, dicha modificación sea lo mas imperceptible posible.\\
+Por lo tanto, en un escenario de esteganogrfía puro (sin encriptar la información antes de ser ocultada), es altamente deseable que una vez que el archivo portador ya fue modificado, dicha modificación sea lo más imperceptible posible.\\
 Partiendo de esta base se puede pensar que la mejor forma de guardar información dentro de un archivo sea comenzar en aquel lugar donde el cambio sufrido por el archivo portador sea mínimo.\\
 Se puede afirmar que por cada bit que se desea almacenar, la probabilidad de producir un cambio en el archivo es de un 50$\%$, dado que si se desea guardar un 0, hay un 50$\%$ de chances de que en la posición a modificar haya un 0 (no habría cambio) o haya un 1 (habría cambio). Al guardar un 1, el caso es análogo.\\
 Por lo tanto, una buena estrategia para decidir dónde conviene comenzar a modificar el archivo es haciendo un análisis previo del mismo analizando tal cuestión.\\
@@ -61,7 +61,7 @@ El porcentaje de cambio sufrido en cada una es de: \\
 1/6 para la primera.\\
 2/6 para la segunda.\\
 4/6 para la tercera.\\
-Lo que da como resultado que la posición más conveniente donde comenzar a guardar los datos es a partir de la primera muestra.\\
+Lo que da como resultado que en el caso particular del ejemplo, la posición más conveniente donde comenzar a guardar los datos es a partir de la primera muestra.\\
 Es importante aclarar que si se considera la posibilidad de comenzar a guardar la información en una posición que puede cambiar, también ésta debe ser almacenada en el archivo, dado que de lo contrario no sería posible recuperar la información oculta. Una opción sería ahora sí guardarla a partir de la primera muestra, dado que el ruido que puede producir una modificación tan pequeña como para sólo guardar un número con una posición es mucho menor probabilísticamente al que produce la modificación de tantas muestras seguidas como lo requiere guardar la información que se desea ocultar.
 
 \subsection{Ejercicio 6.2}
@@ -70,7 +70,7 @@ Es importante aclarar que si se considera la posibilidad de comenzar a guardar l
 En primer lugar se intentó buscar algún tipo de ruido en los archivos obtenidos luego de esteganografiar, o algún tipo de diferencias respecto del original.\\
 Como no se encontró lo buscado, se procedió a analizar las pistas con el \textit{Audacity} intentando analizar la misma cuestión pero ahora de forma gráfica. Tampoco se obtuvieron resultados positivos.\\
 Por último, se buscaron diferencias entre los archivos abriendo cada uno de ellos con un editor hexadecimal, en particular se utilizó \textit{0xED}. Mediante este método de análisis se lograron ver diferencias entre ellos como era de esperarse.\\
-Cabe aclarar que se pudo ver que en este caso en particular, donde el archivo que se intentó ocultar era chico en tamaño, que los métodos de esteganografiado resultaron efectivos, al no develar la existencia de la información. De hecho, si no se contara con otros archivos con los que comparar, no se podría decir que ninguno de ellos tiene información oculta adentro.\\
+Cabe aclarar que se pudo ver que en este caso en particular, donde el archivo que se intentó ocultar era chico en tamaño, los métodos de esteganografiado resultaron efectivos, al no develar la existencia de la información. De hecho, si no se contara con otros archivos con los que comparar, no se podría decir que ninguno de ellos tiene información oculta adentro.\\
 \\
 \noindent En cuanto a comparaciones del método se puede decir lo siguiente de cada uno de ellos:\\
 \begin{table}[H]
@@ -113,14 +113,14 @@ LSBE 	& Al modificar sólo los bytes con valor & Por esta misma razón es que el
 
 \noindent La cuestión a analizar referida a dónde conviene guardar el tipo de archivo es un punto importante pensando en cúales serían las posibles formas de descubrir que hay información oculta dentro de un archivo.\\
 Una posibilidad sería analizar el archivo de audio intentando encontrar un header, o algún patrón que cumpla tal funcionalidad. El lugar más común donde se lo buscaría es en el comienzo de los datos del mismo.\\
-Dado que las posibles extensiones de archivos son limitadas, no sería difícil encontrarlas. Es por tal motivo que es preferible guardar la extensión al final y no al principio. La diferencia es que el tamaño, al ser un número, no podría ser distinguido como parte de los datos ocultos, mientras que lo mismo ocurre con los datos, pero las posibles extensiones sí pueden ser distinguidas.
+Dado que las posibles extensiones de archivos son limitadas, no sería difícil encontrarlas si se las buscara en el lugar adecuado. Es por tal motivo que es preferible guardar la extensión al final y no al principio. La diferencia es que el tamaño, al ser un número, no podría ser distinguido como parte de los datos ocultos, mientras que lo mismo ocurre con los datos, pero las posibles extensiones sí pueden ser distinguidas.
 
 \subsection{Ejercicio 6.4}
 
 \noindent Para descubrir qué se había ocultado dentro de cada archivo, siempre teniendo en cuenta que se conocía que cada archivo ocultaba algo, se procedió de la siguiente manera:\\
 
-\noindent En primer lugar se analizaron los archivos proporcionados .wav, viendo que 2 de ellos eran la misma canción. Sin conocimiento alguno del esteganografiado de los 4 archivos, se procedió a aprovechar la semejanza del 6c.wav y 6d.wav para su comparación, dado que un diff byte a byte probablemente permitiría descifrar el/los algoritmo/s de esteganografiado utilizados en los mismos.
-\noindent Luego de realizar la comparación byte a byte, se notó que gran parte de los archivos en los que diferían, poseían el valor $FF$ o $FE$, lo cual apuntaba a que uno de los archivos poseía esteganografiado con algoritmo LSBE. Por otra parte, el resto de los bytes en que diferían, eran siempre el byte de la izquierda de cada muestra, que en archivos .wav es el byte menos significativo de la muestra, y además diferían en tan solo 1 bit, el menos significativo del byte. Esto apuntaba a que el otro archivo poseía un esteganografiado con algoritmo LSB1.\\
+\noindent En primer lugar se analizaron los archivos proporcionados .wav, viendo que 2 de ellos eran la misma canción. Sin conocimiento del algoritmo de esteganografiado usado en ninguno los 4 archivos, se procedió a aprovechar la semejanza del 6c.wav y 6d.wav para su comparación, dado que un diff byte a byte probablemente permitiría descifrar los algoritmos de esteganografiado utilizados en los mismos.\\
+\noindent Luego de realizar la comparación byte a byte, se notó que gran parte de los archivos en los que diferían, poseían el valor $FF$ o $FE$, lo cual apuntaba a que uno de los archivos estaba esteganografiado con el algoritmo LSBE. Por otra parte, el resto de los bytes en que diferían, eran siempre el byte de la izquierda de cada muestra, que en archivos .wav es el byte menos significativo. Además diferían en tan solo 1 bit, el menos significativo del byte. Ésto apuntaba a que el otro archivo estaba esteganografiado con el algoritmo LSB1.\\
 \noindent Una vez descifrados los dos algoritmos utilizados por los archivos, se procedió a probar ambos en el archivo 6d.wav para su desesteganografiado, de lo que resultó que el algoritmo indicado era LSBE. Luego, el algoritmo utilizado por el archivo 6c.wav era LSB1, lo cual se corroboró al desesteganografiarlo con dicho algoritmo.\\
 \noindent Se obtuvo la información del archivo 6d.wav, que resultó ser un documento .pdf con una password.\\
 \noindent Por otra parte, la información del archivo 6c.wav resultó ser una imagen .png con un tablero del juego \textit{Buscaminas}.\\
@@ -178,10 +178,11 @@ Archivo portador & Archivo recuperado \\
 \end{table}
 
 \subsection{Ejercicio 6.6}
-\noindent El archivo en cuestión era un archivo de imágen .png, al cual se le pudo cambiar la extensión a .zip, y mediante el comando unzip, descomprimir un archivo de texto que incluía información relevante para otros archivos del TP. La forma de realizar esto es la siguiente: se utiliza el comando 'cat' y el operador de redirección $>$, por ejemplo, 'cat imagen.png comprimido.zip $>$ imagenconcomprimido.zip'\\
-\noindent Lo que realiza esto, es concatenar ambos archivos y escribir la totalidad en otro archivo de extension .png. \\
-\noindent La razón de porqué puede visualizarse la imagen y a la vez obtener el contenido del comprimido a partir de un mismo archivo, es debido a que si bien para que la imagen no se corrompa, el header y contenido de la misma deben estar al comienzo del archivo, no ocurre lo mismo con los comprimidos .zip, dado que la utilidad unzip utilizada para descomprimirlo, no requiere que el header y contenido del mismo se encuentren al principio, porque detecta los datos excedentes del comienzo y permite descomprimir el archivo de todas maneras, simplemente ignorando el contenido de la imagen.\\
-\noindent Si en cambio realizaramos esto intercambiando el orden de los archivos, por ejemplo, 'cat comprimido.zip imagen.png $>$ imagenconcomprimido.zip', la imagen no podría ser visualizada por los motivos antes mencionados.
+\noindent El archivo en cuestión era un archivo de imágen .png, al cual se le pudo cambiar la extensión a .zip, y mediante el comando unzip, descomprimir un archivo de texto que incluía información relevante para poder seguir adelante con el desarrollo del trabajo.\\
+La forma de realizar ésto es la siguiente: se utiliza el comando 'cat' y el operador de redirección $>$, por ejemplo, 'cat imagen.png comprimido.zip $>$ imagenconcomprimido.zip'\\
+\noindent Lo que realiza ésto, es concatenar ambos archivos y escribir la totalidad en otro archivo de extension .png. \\
+\noindent La razón de por qué se puede visualizar la imagen y a la vez obtener el contenido del comprimido a partir de un mismo archivo, se debe a a que si bien para que la imagen no se corrompa, el header y contenido de la misma deben estar al comienzo del archivo, no ocurre lo mismo con los comprimidos .zip, dado que la utilidad unzip utilizada para descomprimirlo, no requiere que el header y contenido del mismo se encuentren al principio, porque detecta los datos excedentes del comienzo y permite descomprimir el archivo de todas maneras, simplemente ignorando el contenido de la imagen.\\
+\noindent Si en cambio ésto fuera realizado intercambiando el orden de los archivos, por ejemplo, 'cat comprimido.zip imagen.png $>$ imagenconcomprimido.zip', la imagen no podría ser visualizada por los motivos antes mencionados.
 
 \subsection{Ejercicio 6.7}
 
