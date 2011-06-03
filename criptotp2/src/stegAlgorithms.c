@@ -213,7 +213,9 @@ void *lsbNUnhide(void *message, long messageLen, int sampleLength,
 		fprintf(stderr, "Illegal parameters.\n");
 		return NULL;
 	}
-	*hiddenMessageExtension = NULL;
+	if (expectsExtension) {
+		*hiddenMessageExtension = NULL;	
+	}
 	void *ret = calloc(1, 1);
 	unsigned char carrierMask = ~(0xFF << n); // leaves the space for n bits
 	unsigned int i = 0, j = 0, b = 0;

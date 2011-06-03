@@ -87,8 +87,11 @@ int main (int argc, char* argv[]) {
             memcpy((char *)toCryptData + (4 + dataSize), extension, strlen(extension) + 1);    
     	    
     	    cryptData = malloc(sizeof(char) * (toCryptSize + 32)); //el 32 es el pulmoncito para el padding    	    
-    	    cryptSize = (unsigned int) cryptWithPass(toCryptData, toCryptSize, cryptData, inputStruct->operation, inputStruct->algorithm, inputStruct->mode, inputStruct->pass);
-            if ((stegData = lsbNHideCrypted(sound, wf->chunkdatasize, wf->wBitsPerSample, cryptData, cryptSize, inputStruct->stegAlg, inputStruct->endianMode)) == NULL){
+    	    if ((cryptSize = (unsigned int) cryptWithPass(toCryptData, toCryptSize, cryptData, inputStruct->operation, inputStruct->algorithm, inputStruct->mode, inputStruct->pass)) == -1){
+				printf("Maybe bad pass\n");
+				return -1;
+			}
+			if ((stegData = lsbNHideCrypted(sound, wf->chunkdatasize, wf->wBitsPerSample, cryptData, cryptSize, inputStruct->stegAlg, inputStruct->endianMode)) == NULL){
                 return -1;
             }
                         
@@ -109,10 +112,12 @@ int main (int argc, char* argv[]) {
 	        }
     	
 	        decryptData = malloc(sizeof(char) * hiddenDataSize);
-            cryptSize = (unsigned int) cryptWithPass(hiddenData, hiddenDataSize, decryptData, inputStruct->operation, inputStruct->algorithm, inputStruct->mode, inputStruct->pass);
-            memcpy(&dataSize, decryptData, sizeof(char) * 4);
-            endian_swap(&dataSize); //ENDIANNNNN
-            
+            if ((cryptSize = (unsigned int) cryptWithPass(hiddenData, hiddenDataSize, decryptData, inputStruct->operation, inputStruct->algorithm, inputStruct->mode, inputStruct->pass)) == -1){
+				printf("Maybe bad pass?\n");
+				return -1;
+			}
+        	memcpy(&dataSize, decryptData, sizeof(char) * 4);
+        	endian_swap(&dataSize); //ENDIANNNNN
             data = malloc(sizeof(char) * dataSize);
             memcpy(data, (char *)decryptData + 4, dataSize);
 
