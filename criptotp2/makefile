@@ -29,7 +29,7 @@ LD = gcc
 #
 LDFLAGS = $(LIBRARIES) -m32 -lcrypto -g -o
 #
-TARGET1 = criptoSteg
+TARGET1 = stegowav
 OBJECTS1 = main.o parser.o stegAlgorithms.o wav.o definitions.o crypto.o cutils.o
 
 ###############################################################################
